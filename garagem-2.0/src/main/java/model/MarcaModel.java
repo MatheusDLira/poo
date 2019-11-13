@@ -1,85 +1,60 @@
 package model;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare.Execute;
-import com.mysql.cj.xdevapi.Statement;
-
-import config.SQLConnection;
 import entity.Marca;
 
 public class MarcaModel {
 	
-	Connection c;
+	List<Marca> bdMarca;
 	
-	
-public MarcaModel() {
-		this.c = SQLConnection.getConnection();
-	}
-
-public void cadastrarMarca(Marca marca) {
-	
-		String sql = "INSERT INTO marca(nomeMarca, cod) VALUES(?,?)";
-		
-		try {
-			
-			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setString(1, marca.getNomeMarca());
-			ps.setString(2, "0");
-			ps.execute();
-			
-			
-		}catch(Exception e) {
-			
-			System.out.println("erro: " + e);
-			
-		}
-		
+	public MarcaModel() {
+		bdMarca = new ArrayList<Marca>();
 	}
 	
-	public void alterarMarca() {
+	public Marca cadastrar(Marca marca) {
 		
+		int id = this.bdMarca.size() + 1;
+		marca.setId(id);
 		
+		this.bdMarca.add(marca);
 		
+		return marca;
 	}
 	
-	public void listarMarca(){
+	public Marca alterar(Marca marca) {
 		
-		String sql = "SELECT * FROM marca";
-		ResultSet a;
+		int index = this.bdMarca.indexOf(marca);
 		
-		try {
+		return this.bdMarca.set(index, marca);
+	}
+	
+	public boolean remover(Marca marca) {
+		return this.bdMarca.remove(marca);
+	}
+	
+	public List<Marca> listar(){
+		return this.bdMarca;
+	}
+	
+	public Marca buscarPeloNome( String nome ){
+		
+		/*for(int i = 0; i < bdMarca.size(); i++) {
+    		
+			bdMarca.get(i)
 			
-			PreparedStatement b = c.prepareStatement(sql);
-			a = b.executeQuery(sql);
-			while (a.next()) {
-				Marca auto = new Marca();
-				auto.setNomeMarca(a.getString("nome"));
-				
+    	}*/
+		
+		for(Marca marca : bdMarca) {
+			
+			if(marca.getNomeMarca().equals(nome)) {
+				return marca;
 			}
-			
-			
-		} catch (Exception e) {
-			
 		}
 		
+		return null;
 	}
 	
-	 public void buscarMarca(){
-		 
-		 
-		 
-		 
-	 }
-	 
-	 public void excluirMarca(){
-		 
-		 
-	 }
-	 
-
-
+	
 }

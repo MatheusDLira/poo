@@ -1,23 +1,19 @@
 package view;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import controller.MarcaController;
 import entity.Marca;
 
 public class MarcaView {
-	
+
 	MarcaController marcaController;
 	
-	
-	 public MarcaView() {
-		 
-		this.marcaController = new  MarcaController();
+	public MarcaView() {
+		this.marcaController = new MarcaController();
 	}
-
+	
 	public void menuMarca() {
 	        System.out.println("#Menu Marca");
 	        System.out.println("01- Listar");
@@ -32,19 +28,100 @@ public class MarcaView {
 
 	        switch (op){
 	            case 1:
-	                //listarMarca();
+	            	
+	            	System.out.println("# Lista de Marcas");
+	            	
+	            	List<Marca> marcas = this.marcaController.listar();
+
+	            	
+	            	for(int i = 0; i < marcas.size(); i++) {
+	            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
+	            	}
+	            	
+	                
 	                break;
 	            case 2:
-	                cadastrarMarca();
+	            	System.out.println("# Cadastrar Marca");
+	            	
+	            
+	            	System.out.println("> Informe a marca:");
+	            	sc.nextLine();
+	            	String nome = sc.nextLine();
+	            	
+	            	Marca marca = new Marca();
+	            	marca.setNomeMarca(nome);
+	            	
+	            	Marca marcaCadastrada;
+	            	marcaCadastrada = this.marcaController.cadastrar(marca);
+	            	
+	            	if(marcaCadastrada.getId() != 0) {
+	            		System.out.println("> Marca cadastrada com sucesso!");
+	            	} else {
+	            		System.out.println("> Erro ao cadastrar marca !");
+	            	}
+	                
 	                break;
 	            case 3:
-	            	//alterarMarca();
+	            	
+	            	System.out.println("# Alterar Marca");
+	            	
+	            	System.out.println("> Informe a marca:");
+	            	sc.nextLine();
+	            	String altera = sc.nextLine();
+	            	
+	            	Marca marcaAltera = this.marcaController.buscarPeloNome(altera);
+	            	
+	            	if(marcaAltera != null) {
+	            		System.out.println(" ID: " + marcaAltera.getId() + " NOME: " + marcaAltera.getNomeMarca());
+	            		
+	            		
+	            		System.out.println("> Informe a marca(alterada):");
+		            	
+	            		marcaAltera.setNomeMarca(sc.nextLine());
+	            		
+	            		this.marcaController.alterar(marcaAltera);
+	            		
+	            		
+	            	} else {
+	            		System.out.println("> OPS, marca não encontrada !");
+	            	}
+	            	
+	            	
+	            	
 	                break;
 	            case 4:
-	                //buscarMarca();
+	                
+	            	System.out.println("# Buscar Marca pelo nome");
+	            	
+	            	System.out.println("> Informe a marca:");
+	            	sc.nextLine();
+	            	String busca = sc.nextLine();
+	            	
+	            	Marca marcaBusca = this.marcaController.buscarPeloNome(busca);
+	            	
+	            	if(marcaBusca != null) {
+	            		System.out.println(" ID: " + marcaBusca.getId() + " NOME: " + marcaBusca.getNomeMarca());
+	            	} else {
+	            		System.out.println("> OPS, marca não encontrada !");
+	            	}
+	            	
+	            	
 	                break;
 	            case 5:
-	                //excluirMarca();
+	                
+	            	System.out.println("# Excluir Marca");
+	            	
+	            	System.out.println("> Informe a marca:");
+	            	sc.nextLine();
+	            	String exclui = sc.nextLine();
+	            	
+	            	if( this.marcaController.remover(exclui) == true ) {
+	            		System.out.println("> Marca excluida com sucesso !");
+	            	} else {
+	            		System.out.println("> Marca nar encontrada !");
+	            	}
+	            	
+	            	
 	                break;
 	            case 0: default:
 	                
@@ -55,107 +132,4 @@ public class MarcaView {
 
 	    }
 
-	    public void cadastrarMarca()  {
-	        Scanner sc = new Scanner(System.in);
-	        Marca marca= new Marca();
-
-	        System.out.println("# Cadastro de Marca");
-
-	        System.out.println("> Informe o nome da marca: ");
-	        marca.setNomeMarca(sc.nextLine());
-
-	       
-
-	        marcaController.cadastrarMarca(marca);
-	    }
-
-	   /* public void alterarMarca() {
-	    	
-	    	System.out.println("# Alteracao de Marca");
-	    	
-	    	Scanner sc = new Scanner(System.in);
-	        System.out.println("Informe o chassi do marca que deseja alterar: ");
-	        String busca = sc.nextLine();
-	        for (Marca a : listaAutomoveis){
-	            if(a.getChassi().equals(busca)){
-
-	                System.out.println("> Informe o novo nome da marca: ");
-	                a.setNomeMarca(sc.nextLine());
-
-	                System.out.println("> Informe o novo nome do modelo: ");
-	                a.setNomeModelo(sc.nextLine());
-
-	                System.out.println("> Informe o novo tipo do modelo: ");
-	                a.setTipo(sc.nextLine());
-
-	                System.out.println("> Informe a cor do marca: ");
-	                a.setCor(sc.nextLine());
-
-	                System.out.println("> Informe o novo numero do chassi: ");
-	                a.setChassi(sc.nextLine());
-
-	                System.out.println("> Informe o novo numero da placa: ");
-	                a.setPlaca(sc.nextLine());
-
-	                try {
-	                    System.out.print("> Informe a data de fabricacao: ");
-	                    String data = sc.nextLine();
-	                    Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-	                    a.setAno_fab(dt);
-	                    System.out.print("> Informe o novo ano do modelo: ");
-	                    String data2 = sc.nextLine();
-	                    Date dt2 = new SimpleDateFormat("dd/MM/yyyy").parse(data2);
-	                    a.setAno_modelo(dt2);
-	                } catch (ParseException e){
-	                    System.out.println(e.getMessage());
-	                }
-
-	                System.out.println("> Informe a nova kilometragem do marca: ");
-	                a.setKm(sc.nextFloat());
-
-	                System.out.println("> Informe o novo valor do marca: ");
-	                a.valor = sc.nextFloat();
-	            }
-	        }  	
-	    }
-	    */
-	  /* public void listarMarca(){
-	        System.out.println("#Lista de Automoveis");
-	        for(Marca a:listaAutomoveis){
-	            System.out.println("Marca: " + a.getNomeMarca() + " |\nModelo: " + a.getNomeModelo() + " |\nCor " + a.getCor() + " |\nAno de Fabricação: " + a.getAno_fabricacao() + " |\nAno do Modelo: " + a.getAno_modelo()) ;
-	        }
-	    }
-
-	    /*public void buscarMarca(){
-	        Scanner sc = new Scanner(System.in);
-	        System.out.println("# Busca de Automoveis");
-	        System.out.println("Informe o chassi do marca que deseja visualizar: ");
-	        String busca = sc.nextLine();
-	        for (Marca a : listaAutomoveis){
-	            if(a.getChassi().equals(busca)){
-	                System.out.println("Nome Marca: " + a.getNomeMarca());
-	                System.out.println("Nome Modelo: " + a.getNomeModelo());
-	            }
-	        }
-	    }
-
-	    public void excluirMarca(){
-	        Scanner sc = new Scanner(System.in);
-
-	        System.out.println("# Exclusao de Marca");
-	        System.out.println("Informe o chassi do marca que deseja remover: ");
-	        String busca = sc.nextLine();
-
-	        List<Marca> listaParaRemover = new ArrayList<>();
-
-	        for (Marca a : listaAutomoveis){
-	            if(a.getChassi().equals(busca)){
-	                listaParaRemover.add(a);
-	            }
-	        }
-
-	        listaAutomoveis.removeAll(listaParaRemover);
-	 
-	    }
-*/
 }

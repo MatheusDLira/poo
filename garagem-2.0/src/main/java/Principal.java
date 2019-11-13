@@ -1,12 +1,6 @@
-import config.SQLConnection;
-import view.AutomovelView;
-import view.FuncionarioView;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Scanner;
+
+import view.MarcaView;
 
 public class Principal {
 
@@ -30,6 +24,7 @@ public class Principal {
         System.out.println("02- Cliente");
         System.out.println("03- Automovel");
         System.out.println("04- Vendas");
+        System.out.println("05- Marcas");
         System.out.println("00- Sair");
 
         Scanner sc = new Scanner(System.in);
@@ -37,18 +32,20 @@ public class Principal {
 
         switch (op){
             case 1:
-                FuncionarioView f = new FuncionarioView();
-                f.menuFuncionario();
+                
                 break;
             case 2:
                
                 break;
             case 3:
-                AutomovelView a = new AutomovelView();
-                a.menuAutomovel();
+                
                 break;
             case 4:
-              //  menuVenda();
+              
+                break;
+            case 5:
+            	MarcaView marcaView = new MarcaView();
+            	marcaView.menuMarca();
                 break;
             case 0: default:
                 System.exit(0);
