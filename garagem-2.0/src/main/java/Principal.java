@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 import view.MarcaView;
+import view.ModeloView;
 
 public class Principal {
 
@@ -25,6 +26,7 @@ public class Principal {
         System.out.println("03- Automovel");
         System.out.println("04- Vendas");
         System.out.println("05- Marcas");
+        System.out.println("06- Modelo");
         System.out.println("00- Sair");
 
         Scanner sc = new Scanner(System.in);
@@ -46,6 +48,10 @@ public class Principal {
             case 5:
             	MarcaView marcaView = new MarcaView();
             	marcaView.menuMarca();
+                break;
+            case 6:
+            	ModeloView modeloView = new ModeloView();
+            	modeloView.menuModelo();
                 break;
             case 0: default:
                 System.exit(0);
