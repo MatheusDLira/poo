@@ -4,14 +4,21 @@ import java.util.List;
 import java.util.Scanner;
 
 import controller.ModeloController;
+import controller.MarcaController;
+import entity.Marca;
 import entity.Modelo;
+
+
 
 public class ModeloView {
 
-	ModeloController modeloController;
+	private ModeloController modeloController;
+	private MarcaController marcaController;
+	
 	
 	public ModeloView() {
 		this.modeloController = new ModeloController();
+		this.marcaController = new MarcaController();
 	}
 	
 	public  void menuModelo() {
@@ -35,21 +42,39 @@ public class ModeloView {
 
 	            	
 	            	for(int i = 0; i < modelos.size(); i++) {
-	            		System.out.println(" ID: " + modelos.get(i).getId() + " NOME: " + modelos.get(i).getNomeModelo());
+	            		System.out.println(" ID: " + modelos.get(i).getId() + " NOME: " + modelos.get(i).getNomeModelo() + " TIPO: "+ modelos.get(i).getTipo());
 	            	}
 	            	
-	                
+	            	menuModelo();
 	                break;
 	            case 2:
+	            	Modelo modelo = new Modelo();
 	            	System.out.println("# Cadastrar Modelo");
 	            	
+	            	System.out.println("# Lista de Marcas");
+	            	
+	            	List<Marca> marcas = marcaController.listar();
+
+	            	
+	            	for(int i = 0; i < marcas.size(); i++) {
+	            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
+	            	}
+	            	System.out.println("> Informe a Marca:");
+	            	sc.nextLine();
+	            	String nomeMarca = sc.nextLine();
 	            
 	            	System.out.println("> Informe a modelo:");
-	            	sc.nextLine();
+	            	
 	            	String nome = sc.nextLine();
 	            	
-	            	Modelo modelo = new Modelo();
+	            	System.out.println("> Informe o Tipo:");
+	            	
+	            	String tipo = sc.nextLine();
+	            	
+	            	//Modelo modelo = new Modelo();
 	            	modelo.setNomeModelo(nome);
+	            	modelo.setTipo(tipo);
+	            	modelo.setNomeMarca(nomeMarca);
 	            	
 	            	Modelo modeloCadastrada;
 	            	modeloCadastrada = this.modeloController.cadastrar(modelo);
@@ -59,7 +84,7 @@ public class ModeloView {
 	            	} else {
 	            		System.out.println("> Erro ao cadastrar modelo !");
 	            	}
-	                
+	            	menuModelo();
 	                break;
 	            case 3:
 	            	
@@ -86,7 +111,7 @@ public class ModeloView {
 	            		System.out.println("> OPS, modelo não encontrada !");
 	            	}
 	            	
-	            	
+	            	menuModelo();
 	            	
 	                break;
 	            case 4:
@@ -104,7 +129,7 @@ public class ModeloView {
 	            	} else {
 	            		System.out.println("> OPS, modelo não encontrada !");
 	            	}
-	            	
+	            	menuModelo();
 	            	
 	                break;
 	            case 5:
@@ -124,11 +149,11 @@ public class ModeloView {
 	            	
 	                break;
 	            case 0: default:
-	                
-	                break;
+	            	break;
+	               
 	        }
 
-	        menuModelo();
+	        //menuModelo();
 
 	    }
 

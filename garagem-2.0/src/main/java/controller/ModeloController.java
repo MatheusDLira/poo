@@ -43,6 +43,7 @@ public class ModeloController {
 	
 	public List<Modelo> listar(){
 		return this.modeloModel.listar();
+		
 	}
 	
 	public Modelo buscarPeloNome( String nome ){

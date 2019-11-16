@@ -7,7 +7,7 @@ import entity.Marca;
 
 public class MarcaModel {
 	
-	List<Marca> bdMarca;
+	private List<Marca> bdMarca;
 	
 	public MarcaModel() {
 		bdMarca = new ArrayList<Marca>();

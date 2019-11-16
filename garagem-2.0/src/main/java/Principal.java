@@ -1,9 +1,17 @@
+import java.util.List;
 import java.util.Scanner;
 
+import entity.Modelo;
+import view.AutomovelView;
 import view.MarcaView;
 import view.ModeloView;
 
+
 public class Principal {
+	
+	AutomovelView automovelView = new AutomovelView();
+	MarcaView marcaView = new MarcaView();
+	ModeloView modeloView = new ModeloView();
 
     public static void main(String[] args){
     	
@@ -40,18 +48,23 @@ public class Principal {
                
                 break;
             case 3:
-                
+            	
+            	automovelView.menuAutomovel();
+            	menuPrincipal();
                 break;
             case 4:
               
                 break;
             case 5:
-            	MarcaView marcaView = new MarcaView();
+            	
             	marcaView.menuMarca();
+            	menuPrincipal();
                 break;
             case 6:
-            	ModeloView modeloView = new ModeloView();
-            	modeloView.menuModelo();
+            	
+            	modeloView.menuModelo();  
+            	menuPrincipal();
+            	
                 break;
             case 0: default:
                 System.exit(0);

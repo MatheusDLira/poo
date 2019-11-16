@@ -8,7 +8,7 @@ import entity.Marca;
 
 public class MarcaView {
 
-	MarcaController marcaController;
+	private MarcaController marcaController;
 	
 	public MarcaView() {
 		this.marcaController = new MarcaController();
@@ -37,7 +37,7 @@ public class MarcaView {
 	            	for(int i = 0; i < marcas.size(); i++) {
 	            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
 	            	}
-	            	
+	            	menuMarca();
 	                
 	                break;
 	            case 2:
@@ -59,6 +59,7 @@ public class MarcaView {
 	            	} else {
 	            		System.out.println("> Erro ao cadastrar marca !");
 	            	}
+	            	menuMarca();
 	                
 	                break;
 	            case 3:
@@ -86,7 +87,7 @@ public class MarcaView {
 	            		System.out.println("> OPS, marca não encontrada !");
 	            	}
 	            	
-	            	
+	            	menuMarca();
 	            	
 	                break;
 	            case 4:
@@ -105,7 +106,7 @@ public class MarcaView {
 	            		System.out.println("> OPS, marca não encontrada !");
 	            	}
 	            	
-	            	
+	            	menuMarca();
 	                break;
 	            case 5:
 	                
@@ -121,14 +122,14 @@ public class MarcaView {
 	            		System.out.println("> Marca nar encontrada !");
 	            	}
 	            	
-	            	
+	            	menuMarca();
 	                break;
 	            case 0: default:
 	                
 	                break;
 	        }
 
-	        menuMarca();
+	        //menuMarca();
 
 	    }
 

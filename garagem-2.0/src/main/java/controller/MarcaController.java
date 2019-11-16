@@ -18,9 +18,12 @@ public class MarcaController {
 		
 		Marca marca2;
 		
+		
 		marca2 = this.marcaModel.cadastrar(marca);
 		
+		
 		return marca2;
+		
 		
 		// return this.marcaModel.cadastrar(marca);
 	}
@@ -43,10 +46,12 @@ public class MarcaController {
 	
 	public List<Marca> listar(){
 		return this.marcaModel.listar();
+		
 	}
 	
 	public Marca buscarPeloNome( String nome ){
 		return this.marcaModel.buscarPeloNome(nome);
+		
 	}
 	 
 
