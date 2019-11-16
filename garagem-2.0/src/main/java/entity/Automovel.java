@@ -2,9 +2,9 @@ package entity;
 
 import java.util.Date;
 
-public class Automovel extends Modelo {
+public class Automovel {
 	
-	private int idAutomovel;
+	private int id;
 	private String cor;
 	private Date ano_fabricacao;
 	private Date ano_modelo;
@@ -12,13 +12,20 @@ public class Automovel extends Modelo {
 	private String placa;
 	private float km;
 	private float valor;
+	private Modelo modelo;
 	
 	
-	public int getIdAutomovel() {
-		return idAutomovel;
+	public Modelo getModelo() {
+		return modelo;
 	}
-	public void setIdAutomovel(int idAutomovel) {
-		this.idAutomovel = idAutomovel;
+	public void setModelo(Modelo modelo) {
+		this.modelo = modelo;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getCor() {
 		return cor;

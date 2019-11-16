@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ public class ModeloView {
 		this.marcaController = new MarcaController();
 	}
 	
-	public  void menuModelo() {
+	public ArrayList<Modelo> menuModelo(ArrayList<Modelo> bdModelo, ArrayList<Marca> bdMarca) {
 	        System.out.println("#Menu Modelo");
 	        System.out.println("01- Listar");
 	        System.out.println("02- Cadastrar");
@@ -38,14 +39,15 @@ public class ModeloView {
 	            	
 	            	System.out.println("# Lista de Modelos");
 	            	
-	            	List<Modelo> modelos = this.modeloController.listar();
+	            	List<Modelo> modelos = bdModelo;
 
 	            	
 	            	for(int i = 0; i < modelos.size(); i++) {
-	            		System.out.println(" ID: " + modelos.get(i).getId() + " NOME: " + modelos.get(i).getNomeModelo() + " TIPO: "+ modelos.get(i).getTipo());
+	            		System.out.println(" ID: " + modelos.get(i).getId() + " MODELO: " + modelos.get(i).getNomeModelo()
+	            		+ " TIPO: "+ modelos.get(i).getTipo() + " MARCA: "+ modelos.get(i).getMarca().getNomeMarca());
 	            	}
 	            	
-	            	menuModelo();
+	            	menuModelo(bdModelo, bdMarca);
 	                break;
 	            case 2:
 	            	Modelo modelo = new Modelo();
@@ -53,15 +55,29 @@ public class ModeloView {
 	            	
 	            	System.out.println("# Lista de Marcas");
 	            	
-	            	List<Marca> marcas = marcaController.listar();
+	            	List<Marca> marcas = bdMarca;
 
-	            	
-	            	for(int i = 0; i < marcas.size(); i++) {
-	            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
+	            	if(marcas.size() < 1) {
+	            		System.out.println("Não existem marcas cadastradas.");
+	            		menuModelo(bdModelo, bdMarca);
+	            		break;
+	            	}else {
+	            		for(int i = 0; i < marcas.size(); i++) {
+		            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
+		            	}
 	            	}
+	            	
 	            	System.out.println("> Informe a Marca:");
 	            	sc.nextLine();
 	            	String nomeMarca = sc.nextLine();
+	            	Marca marca = marcaController.buscarPeloNome(nomeMarca, bdMarca);
+	            	
+	            	
+	            	if(marca == null) {
+	            		System.out.println("Esta marca não existe");
+	            		menuModelo(bdModelo, bdMarca);
+	            		break;
+	            	}
 	            
 	            	System.out.println("> Informe a modelo:");
 	            	
@@ -74,17 +90,17 @@ public class ModeloView {
 	            	//Modelo modelo = new Modelo();
 	            	modelo.setNomeModelo(nome);
 	            	modelo.setTipo(tipo);
-	            	modelo.setNomeMarca(nomeMarca);
+	            	modelo.setMarca(marca);
 	            	
-	            	Modelo modeloCadastrada;
-	            	modeloCadastrada = this.modeloController.cadastrar(modelo);
+	            	int size = bdModelo.size();
+	            	bdModelo = this.modeloController.cadastrar(modelo, bdModelo);
 	            	
-	            	if(modeloCadastrada.getId() != 0) {
+	            	if(bdModelo.size() > size) {
 	            		System.out.println("> Modelo cadastrada com sucesso!");
 	            	} else {
 	            		System.out.println("> Erro ao cadastrar modelo !");
 	            	}
-	            	menuModelo();
+	            	menuModelo(bdModelo, bdMarca);
 	                break;
 	            case 3:
 	            	
@@ -94,24 +110,24 @@ public class ModeloView {
 	            	sc.nextLine();
 	            	String altera = sc.nextLine();
 	            	
-	            	Modelo modeloAltera = this.modeloController.buscarPeloNome(altera);
+	            	Modelo modeloAltera = this.modeloController.buscarPeloNome(altera, bdModelo);
 	            	
 	            	if(modeloAltera != null) {
-	            		System.out.println(" ID: " + modeloAltera.getId() + " NOME: " + modeloAltera.getNomeModelo());
+	            		System.out.println(" ID: " + modeloAltera.getId() + " NOME: " + modeloAltera.getNomeModelo() + " TIPO: "+ modeloAltera.getTipo());
 	            		
 	            		
 	            		System.out.println("> Informe a modelo(alterada):");
 		            	
 	            		modeloAltera.setNomeModelo(sc.nextLine());
 	            		
-	            		this.modeloController.alterar(modeloAltera);
+	            		this.modeloController.alterar(modeloAltera, bdModelo);
 	            		
 	            		
 	            	} else {
 	            		System.out.println("> OPS, modelo não encontrada !");
 	            	}
 	            	
-	            	menuModelo();
+	            	menuModelo(bdModelo, bdMarca);
 	            	
 	                break;
 	            case 4:
@@ -122,14 +138,14 @@ public class ModeloView {
 	            	sc.nextLine();
 	            	String busca = sc.nextLine();
 	            	
-	            	Modelo modeloBusca = this.modeloController.buscarPeloNome(busca);
+	            	Modelo modeloBusca = this.modeloController.buscarPeloNome(busca, bdModelo);
 	            	
 	            	if(modeloBusca != null) {
-	            		System.out.println(" ID: " + modeloBusca.getId() + " NOME: " + modeloBusca.getNomeModelo());
+	            		System.out.println(" ID: " + modeloBusca.getId() + " NOME: " + modeloBusca.getNomeModelo()+ " TIPO: "+ modeloBusca.getTipo());
 	            	} else {
 	            		System.out.println("> OPS, modelo não encontrada !");
 	            	}
-	            	menuModelo();
+	            	menuModelo(bdModelo, bdMarca);
 	            	
 	                break;
 	            case 5:
@@ -140,7 +156,7 @@ public class ModeloView {
 	            	sc.nextLine();
 	            	String exclui = sc.nextLine();
 	            	
-	            	if( this.modeloController.remover(exclui) == true ) {
+	            	if( this.modeloController.remover(exclui, bdModelo) != null ) {
 	            		System.out.println("> Modelo excluida com sucesso !");
 	            	} else {
 	            		System.out.println("> Modelo nar encontrada !");
@@ -152,8 +168,10 @@ public class ModeloView {
 	            	break;
 	               
 	        }
-
-	        //menuModelo();
+	        
+	        
+	        return bdModelo;
+	        
 
 	    }
 

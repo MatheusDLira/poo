@@ -1,6 +1,8 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import entity.Marca;
 import entity.Modelo;
 import view.AutomovelView;
 import view.MarcaView;
@@ -9,6 +11,7 @@ import view.ModeloView;
 
 public class Principal {
 	
+	Banco banco = new Banco();	
 	AutomovelView automovelView = new AutomovelView();
 	MarcaView marcaView = new MarcaView();
 	ModeloView modeloView = new ModeloView();
@@ -25,7 +28,8 @@ public class Principal {
     
     
     public void menuPrincipal(){
-
+    	
+    	//ArrayList<Marca> bdMarca = new ArrayList<Marca>();
 
 
         System.out.println("#Menu Principal");
@@ -48,8 +52,7 @@ public class Principal {
                
                 break;
             case 3:
-            	
-            	automovelView.menuAutomovel();
+            	banco.bdAutomovel = automovelView.menuAutomovel( banco.bdAutomovel, banco.bdModelo);  
             	menuPrincipal();
                 break;
             case 4:
@@ -57,12 +60,12 @@ public class Principal {
                 break;
             case 5:
             	
-            	marcaView.menuMarca();
+            	banco.bdMarca = marcaView.menuMarca(banco.bdMarca);
             	menuPrincipal();
                 break;
             case 6:
             	
-            	modeloView.menuModelo();  
+            	banco.bdModelo = modeloView.menuModelo(banco.bdModelo, banco.bdMarca);  
             	menuPrincipal();
             	
                 break;

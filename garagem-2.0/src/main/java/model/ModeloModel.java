@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.Marca;
 import entity.Modelo;
 
 public class ModeloModel {
@@ -13,32 +14,35 @@ public class ModeloModel {
 		bdModelo = new ArrayList<Modelo>();
 	}
 	
-	public Modelo cadastrar(Modelo modelo) {
+	public ArrayList<Modelo> cadastrar(Modelo modelo, ArrayList<Modelo> bdModelo) {
 		
-		int id = this.bdModelo.size() + 1;
+		int id = bdModelo.size() + 1;
 		modelo.setId(id);
 		
-		this.bdModelo.add(modelo);
+		bdModelo.add(modelo);
 		
-		return modelo;
+		return bdModelo;
 	}
 	
-	public Modelo alterar(Modelo modelo) {
+	public ArrayList<Modelo> alterar(Modelo modelo, ArrayList<Modelo> bdModelo) {
 		
-		int index = this.bdModelo.indexOf(modelo);
+		int index = bdModelo.indexOf(modelo);
 		
-		return this.bdModelo.set(index, modelo);
+		bdModelo.set(index, modelo);
+		
+		return bdModelo;
 	}
 	
-	public boolean remover(Modelo modelo) {
-		return this.bdModelo.remove(modelo);
+	public ArrayList<Modelo> remover(Modelo modelo, ArrayList<Modelo> bdModelo) {
+		bdModelo.remove(modelo);
+		return bdModelo;
 	}
 	
-	public List<Modelo> listar(){
-		return this.bdModelo;
-	}
+//	public List<Modelo> listar(){
+//		return this.bdModelo;
+//	}
 	
-	public Modelo buscarPeloNome( String nome ){
+	public Modelo buscarPeloNome( String nome, ArrayList<Modelo> bdModelo ){
 		
 		/*for(int i = 0; i < bdModelo.size(); i++) {
     		
@@ -46,15 +50,16 @@ public class ModeloModel {
 			
     	}*/
 		
-		for(Modelo modelo : bdModelo) {
+		for(Modelo nodelo : bdModelo) {
 			
-			if(modelo.getNomeModelo().equals(nome)) {
-				return modelo;
+			if(nodelo.getNomeModelo().equals(nome)) {
+				return nodelo;
 			}
 		}
 		
 		return null;
 	}
+	
 	
 	
 }

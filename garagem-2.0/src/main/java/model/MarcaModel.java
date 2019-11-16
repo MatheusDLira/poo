@@ -7,38 +7,41 @@ import entity.Marca;
 
 public class MarcaModel {
 	
-	private List<Marca> bdMarca;
+	//private List<Marca> bdMarca;
 	
-	public MarcaModel() {
-		bdMarca = new ArrayList<Marca>();
-	}
+//	public MarcaModel() {
+//		bdMarca = new ArrayList<Marca>();
+//	}
 	
-	public Marca cadastrar(Marca marca) {
+	public ArrayList<Marca> cadastrar(Marca marca, ArrayList<Marca> bdMarca) {
 		
-		int id = this.bdMarca.size() + 1;
+		int id = bdMarca.size() + 1;
 		marca.setId(id);
 		
-		this.bdMarca.add(marca);
+		bdMarca.add(marca);
 		
-		return marca;
+		return bdMarca;
 	}
 	
-	public Marca alterar(Marca marca) {
+	public ArrayList<Marca> alterar(Marca marca, ArrayList<Marca> bdMarca) {
 		
-		int index = this.bdMarca.indexOf(marca);
+		int index = bdMarca.indexOf(marca);
 		
-		return this.bdMarca.set(index, marca);
+		bdMarca.set(index, marca);
+		
+		return bdMarca;
 	}
 	
-	public boolean remover(Marca marca) {
-		return this.bdMarca.remove(marca);
+	public ArrayList<Marca> remover(Marca marca, ArrayList<Marca> bdMarca) {
+		bdMarca.remove(marca);
+		return bdMarca;
 	}
 	
-	public List<Marca> listar(){
-		return this.bdMarca;
-	}
+//	public List<Marca> listar(){
+//		return this.bdMarca;
+//	}
 	
-	public Marca buscarPeloNome( String nome ){
+	public Marca buscarPeloNome( String nome, ArrayList<Marca> bdMarca ){
 		
 		/*for(int i = 0; i < bdMarca.size(); i++) {
     		

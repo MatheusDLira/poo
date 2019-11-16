@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class MarcaView {
 		this.marcaController = new MarcaController();
 	}
 	
-	public void menuMarca() {
+	public ArrayList<Marca> menuMarca(ArrayList<Marca> bdMarca) {
 	        System.out.println("#Menu Marca");
 	        System.out.println("01- Listar");
 	        System.out.println("02- Cadastrar");
@@ -31,13 +32,17 @@ public class MarcaView {
 	            	
 	            	System.out.println("# Lista de Marcas");
 	            	
-	            	List<Marca> marcas = this.marcaController.listar();
+	            	List<Marca> marcas = bdMarca;
 
-	            	
-	            	for(int i = 0; i < marcas.size(); i++) {
-	            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
+	            	if(marcas.size() < 1) {
+	            		System.out.println("Não existem marcas cadastradas.");
+	            	}else {
+	            		for(int i = 0; i < marcas.size(); i++) {
+		            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
+		            	}
 	            	}
-	            	menuMarca();
+	            	
+	            	menuMarca(bdMarca);
 	                
 	                break;
 	            case 2:
@@ -51,15 +56,17 @@ public class MarcaView {
 	            	Marca marca = new Marca();
 	            	marca.setNomeMarca(nome);
 	            	
-	            	Marca marcaCadastrada;
-	            	marcaCadastrada = this.marcaController.cadastrar(marca);
+	            	int size = bdMarca.size();
 	            	
-	            	if(marcaCadastrada.getId() != 0) {
+	            	
+	            	bdMarca = this.marcaController.cadastrar(marca, bdMarca);
+	            	
+	            	if(bdMarca.size() > size) {
 	            		System.out.println("> Marca cadastrada com sucesso!");
 	            	} else {
 	            		System.out.println("> Erro ao cadastrar marca !");
 	            	}
-	            	menuMarca();
+	            	menuMarca(bdMarca);
 	                
 	                break;
 	            case 3:
@@ -70,7 +77,7 @@ public class MarcaView {
 	            	sc.nextLine();
 	            	String altera = sc.nextLine();
 	            	
-	            	Marca marcaAltera = this.marcaController.buscarPeloNome(altera);
+	            	Marca marcaAltera = this.marcaController.buscarPeloNome(altera, bdMarca);
 	            	
 	            	if(marcaAltera != null) {
 	            		System.out.println(" ID: " + marcaAltera.getId() + " NOME: " + marcaAltera.getNomeMarca());
@@ -80,14 +87,14 @@ public class MarcaView {
 		            	
 	            		marcaAltera.setNomeMarca(sc.nextLine());
 	            		
-	            		this.marcaController.alterar(marcaAltera);
+	            		this.marcaController.alterar(marcaAltera, bdMarca);
 	            		
 	            		
 	            	} else {
 	            		System.out.println("> OPS, marca não encontrada !");
 	            	}
 	            	
-	            	menuMarca();
+	            	menuMarca(bdMarca);
 	            	
 	                break;
 	            case 4:
@@ -98,7 +105,7 @@ public class MarcaView {
 	            	sc.nextLine();
 	            	String busca = sc.nextLine();
 	            	
-	            	Marca marcaBusca = this.marcaController.buscarPeloNome(busca);
+	            	Marca marcaBusca = this.marcaController.buscarPeloNome(busca, bdMarca);
 	            	
 	            	if(marcaBusca != null) {
 	            		System.out.println(" ID: " + marcaBusca.getId() + " NOME: " + marcaBusca.getNomeMarca());
@@ -106,7 +113,7 @@ public class MarcaView {
 	            		System.out.println("> OPS, marca não encontrada !");
 	            	}
 	            	
-	            	menuMarca();
+	            	menuMarca(bdMarca);
 	                break;
 	            case 5:
 	                
@@ -116,19 +123,19 @@ public class MarcaView {
 	            	sc.nextLine();
 	            	String exclui = sc.nextLine();
 	            	
-	            	if( this.marcaController.remover(exclui) == true ) {
+	            	if( this.marcaController.remover(exclui, bdMarca) != null ) {
 	            		System.out.println("> Marca excluida com sucesso !");
 	            	} else {
-	            		System.out.println("> Marca nar encontrada !");
+	            		System.out.println("> Marca não encontrada !");
 	            	}
 	            	
-	            	menuMarca();
+	            	menuMarca(bdMarca);
 	                break;
 	            case 0: default:
-	                
 	                break;
 	        }
-
+	        
+	        return bdMarca;
 	        //menuMarca();
 
 	    }
