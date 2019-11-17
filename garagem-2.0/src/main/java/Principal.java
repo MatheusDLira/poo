@@ -2,11 +2,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import entity.Cliente;
 import entity.Marca;
 import entity.Modelo;
 import view.AutomovelView;
+import view.ClienteView;
+import view.FuncionarioView;
 import view.MarcaView;
 import view.ModeloView;
+import view.VendaView;
 
 
 public class Principal {
@@ -15,6 +19,9 @@ public class Principal {
 	AutomovelView automovelView = new AutomovelView();
 	MarcaView marcaView = new MarcaView();
 	ModeloView modeloView = new ModeloView();
+	FuncionarioView funcionarioView = new FuncionarioView();
+	ClienteView clienteView = new ClienteView();
+	VendaView vendaView = new VendaView();
 
     public static void main(String[] args){
     	
@@ -46,17 +53,20 @@ public class Principal {
 
         switch (op){
             case 1:
-                
+            	banco.bdFuncionario = funcionarioView.menuFuncionario(banco.bdFuncionario);
+            	menuPrincipal();
                 break;
             case 2:
-               
+            	banco.bdCliente = clienteView.menuCliente(banco.bdCliente);
+            	menuPrincipal();
                 break;
             case 3:
             	banco.bdAutomovel = automovelView.menuAutomovel( banco.bdAutomovel, banco.bdModelo);  
             	menuPrincipal();
                 break;
             case 4:
-              
+            	banco.bdVenda = vendaView.menuVenda( banco.bdVenda, banco.bdAutomovel, banco.bdCliente, banco.bdFuncionario);  
+            	menuPrincipal();
                 break;
             case 5:
             	

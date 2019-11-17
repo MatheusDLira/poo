@@ -112,6 +112,14 @@ public class AutomovelView {
 		              System.out.println("> Informe a Placa:");
 		              String placa = sc.nextLine();
 		              
+		              for(int i = 0; i < bdAutomovel.size(); i++) {
+	                	if(bdAutomovel.get(i).getPlaca() == placa) {
+	                		System.out.println("Erro: Esta placa já está cadastrada.");
+	                		menuAutomovel(bdAutomovel, bdModelo);
+	    	                break;
+	                	}
+		              }
+		              
 		              System.out.println("> Informe a Kilometragem:");
 		              float km = sc.nextFloat();
 		              

@@ -1,6 +1,6 @@
 package entity;
 
-public class Cliente {
+public class Cliente extends Pessoa {
 	private int codigo;
 
 	public int getCodigo() {

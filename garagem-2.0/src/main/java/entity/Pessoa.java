@@ -3,7 +3,7 @@ package entity;
 import java.util.Date;
 
 public class Pessoa {
-	
+	private int id;
 	private String nome;
 	private String cpf;
 	private String endereco;
@@ -13,6 +13,12 @@ public class Pessoa {
 	
 	
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getNome() {
 		return nome;
 	}

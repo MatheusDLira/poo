@@ -10,6 +10,11 @@ public class Badeco extends Funcionario {
 	public void setFuncao(String funcao) {
 		this.funcao = funcao;
 	}
-	
 
+	@Override
+	public float calculaSalario(float salario) {
+		return (float) (salario*0.8);
+	}
+	
+	
 }
