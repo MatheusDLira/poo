@@ -14,12 +14,10 @@ import entity.Modelo;
 public class ModeloView {
 
 	private ModeloController modeloController;
-	private MarcaController marcaController;
 	
 	
 	public ModeloView() {
 		this.modeloController = new ModeloController();
-		this.marcaController = new MarcaController();
 	}
 	
 	public ArrayList<Modelo> menuModelo(ArrayList<Modelo> bdModelo, ArrayList<Marca> bdMarca) {
@@ -49,7 +47,7 @@ public class ModeloView {
 	            	
 	            	menuModelo(bdModelo, bdMarca);
 	                break;
-	            case 2:
+	            case 2:{
 	            	Modelo modelo = new Modelo();
 	            	System.out.println("# Cadastrar Modelo");
 	            	
@@ -70,7 +68,7 @@ public class ModeloView {
 	            	System.out.println("> Informe a Marca:");
 	            	sc.nextLine();
 	            	String nomeMarca = sc.nextLine();
-	            	Marca marca = marcaController.buscarPeloNome(nomeMarca, bdMarca);
+	            	Marca marca = modeloController.buscarMarca(nomeMarca, bdMarca);
 	            	
 	            	
 	            	if(marca == null) {
@@ -79,7 +77,7 @@ public class ModeloView {
 	            		break;
 	            	}
 	            
-	            	System.out.println("> Informe a modelo:");
+	            	System.out.println("> Informe o modelo:");
 	            	
 	            	String nome = sc.nextLine();
 	            	
@@ -101,12 +99,12 @@ public class ModeloView {
 	            		System.out.println("> Erro ao cadastrar modelo !");
 	            	}
 	            	menuModelo(bdModelo, bdMarca);
-	                break;
-	            case 3:
+	                break;}
+	            case 3:{
 	            	
 	            	System.out.println("# Alterar Modelo");
 	            	
-	            	System.out.println("> Informe a modelo:");
+	            	System.out.println("> Informe o modelo: ");
 	            	sc.nextLine();
 	            	String altera = sc.nextLine();
 	            	
@@ -115,12 +113,44 @@ public class ModeloView {
 	            	if(modeloAltera != null) {
 	            		System.out.println(" ID: " + modeloAltera.getId() + " NOME: " + modeloAltera.getNomeModelo() + " TIPO: "+ modeloAltera.getTipo());
 	            		
-	            		
-	            		System.out.println("> Informe a modelo(alterada):");
+	            		System.out.println("# Lista de Marcas");
 		            	
-	            		modeloAltera.setNomeModelo(sc.nextLine());
+		            	List<Marca> marcas = bdMarca;
+
+		            	if(marcas.size() < 1) {
+		            		System.out.println("Não existem marcas cadastradas.");
+		            		menuModelo(bdModelo, bdMarca);
+		            		break;
+		            	}else {
+		            		for(int i = 0; i < marcas.size(); i++) {
+			            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
+			            	}
+		            	}
 	            		
-	            		this.modeloController.alterar(modeloAltera, bdModelo);
+	            		System.out.println("> Informe a Marca(Alterado): ");
+		            	sc.nextLine();
+		            	String nomeMarca = sc.nextLine();
+		            	Marca marca = modeloController.buscarMarca(nomeMarca, bdMarca);
+		            	
+		            	
+		            	if(marca == null) {
+		            		System.out.println("Esta marca não existe");
+		            		menuModelo(bdModelo, bdMarca);
+		            		break;
+		            	}
+		            
+		            	System.out.println("> Informe o modelo(Alterado): ");
+		            	
+		            	String nome = sc.nextLine();
+		            	
+		            	System.out.println("> Informe o Tipo(Alterado): ");
+		            	
+		            	String tipo = sc.nextLine();
+		            	
+		            	//Modelo modelo = new Modelo();
+		            	modeloAltera.setNomeModelo(nome);
+		            	modeloAltera.setTipo(tipo);
+		            	modeloAltera.setMarca(marca);
 	            		
 	            		
 	            	} else {
@@ -129,7 +159,7 @@ public class ModeloView {
 	            	
 	            	menuModelo(bdModelo, bdMarca);
 	            	
-	                break;
+	                break;}
 	            case 4:
 	                
 	            	System.out.println("# Buscar Modelo pelo nome");
@@ -156,10 +186,13 @@ public class ModeloView {
 	            	sc.nextLine();
 	            	String exclui = sc.nextLine();
 	            	
-	            	if( this.modeloController.remover(exclui, bdModelo) != null ) {
-	            		System.out.println("> Modelo excluida com sucesso !");
+	            	int size = bdModelo.size();
+	            	bdModelo = this.modeloController.remover(exclui, bdModelo);
+	            	
+	            	if( bdModelo.size() < size) {
+	            		System.out.println("> Modelo excluido com sucesso !");
 	            	} else {
-	            		System.out.println("> Modelo nar encontrada !");
+	            		System.out.println("> Modelo não encontrado !");
 	            	}
 	            	
 	            	

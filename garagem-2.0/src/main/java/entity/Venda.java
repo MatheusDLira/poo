@@ -3,7 +3,7 @@ package entity;
 import java.util.Date;
 
 public class Venda {
-	
+	private int id;
 	private Automovel automovel;
 	private float valor_venda;
 	private Cliente cliente;
@@ -11,8 +11,16 @@ public class Venda {
 	private Date dt_venda;
 	private int cod_venda;
 	private float comissao_venda;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public Automovel getAutomovel() {
 		return automovel;
+		
 	}
 	public void setAutomovel(Automovel automovel) {
 		this.automovel = automovel;

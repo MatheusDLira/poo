@@ -5,14 +5,17 @@ import java.util.List;
 
 import entity.Marca;
 import entity.Modelo;
+import model.MarcaModel;
 import model.ModeloModel;
 
 public class ModeloController {
 	
 	private ModeloModel modeloModel;
+	private MarcaModel marcaModel;
 	
 	public ModeloController() {
 		this.modeloModel = new ModeloModel();
+		this.marcaModel = new MarcaModel();
 	}
 	
 	public ArrayList<Modelo> cadastrar(Modelo modelo, ArrayList<Modelo> bdModelo) {
@@ -52,5 +55,9 @@ public class ModeloController {
 		
 	}
 	 
+	public Marca buscarMarca( String nome, ArrayList<Marca> bdMarca){
+		return this.marcaModel.buscarPeloNome(nome, bdMarca);
+		
+	}
 
 }

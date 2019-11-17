@@ -1,10 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-import entity.Cliente;
-import entity.Marca;
-import entity.Modelo;
 import view.AutomovelView;
 import view.ClienteView;
 import view.FuncionarioView;

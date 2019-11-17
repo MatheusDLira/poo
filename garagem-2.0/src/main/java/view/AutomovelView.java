@@ -17,12 +17,10 @@ import entity.Automovel;
 public class AutomovelView {
 
 	private AutomovelController automovelController;
-	private ModeloController modeloController;
 	
 	
 	public AutomovelView() {
 		this.automovelController = new AutomovelController();
-		this.modeloController = new ModeloController();
 	}
 	
 	public ArrayList<Automovel> menuAutomovel(ArrayList<Automovel> bdAutomovel, ArrayList<Modelo> bdModelo) {
@@ -54,7 +52,7 @@ public class AutomovelView {
 	            	
 	            	menuAutomovel(bdAutomovel, bdModelo);
 	                break;
-	            case 2:
+	            case 2:{
 	            	Automovel automovel = new Automovel();
 	            	System.out.println("# Cadastrar Automovel");
 	            	
@@ -78,7 +76,7 @@ public class AutomovelView {
 	            	System.out.println("> Informe a Modelo:");
 	            	sc.nextLine();
 	            	String nomeModelo = sc.nextLine();
-	            	Modelo modelo = modeloController.buscarPeloNome(nomeModelo, bdModelo);
+	            	Modelo modelo = automovelController.buscarModelo(nomeModelo, bdModelo);
 	            	
 	            	
 	            	if(modelo == null) {
@@ -144,7 +142,7 @@ public class AutomovelView {
 	            		System.out.println("> Erro ao cadastrar automovel !");
 	            	}
 	            	menuAutomovel(bdAutomovel, bdModelo);
-	                break;
+	                break;}
 	                
 	            case 3:
 	            	
@@ -162,11 +160,28 @@ public class AutomovelView {
 	    	            		+ " PLACA: "+ automovelAltera.getPlaca()+ " ANO DE FABRICAÇÃO: "+ automovelAltera.getAno_fabricacao()
 	    	            		+ " ANO DO MODELO: "+ automovelAltera.getAno_modelo());
 	            		
+	            		System.out.println("# Lista de Modelos");
+		            	
+		            	List<Modelo> modelos = bdModelo;
+
+		            	if(modelos.size() < 1) {
+		            		System.out.println("Não existem modelos cadastrados.");
+		            		menuAutomovel(bdAutomovel, bdModelo);
+		            		break;
+		            		
+		            	}else {
+		            		for(int i = 0; i < modelos.size(); i++) {
+			            		System.out.println(" ID: " + modelos.get(i).getId() + " MODELO: " + modelos.get(i).getNomeModelo() 
+			            		+ " MARCA: "+ modelos.get(i).getMarca().getNomeMarca());
+			            	}
+		            		
+		            	}
+		            	
 	            		
-	            		System.out.println("> Informe a Modelo (alterado):");
+	            		System.out.println("> Informe o Modelo (alterado):");
 		            	sc.nextLine();
 		            	String modeloAlterado = sc.nextLine();
-		            	Modelo modeloNovo = modeloController.buscarPeloNome(modeloAlterado, bdModelo);
+		            	Modelo modeloNovo = automovelController.buscarModelo(modeloAlterado, bdModelo);
 		            	
 		            	
 		            	if(modeloNovo == null) {

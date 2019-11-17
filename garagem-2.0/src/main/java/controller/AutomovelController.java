@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Marca;
+import entity.Modelo;
 import entity.Automovel;
 import model.AutomovelModel;
+import model.ModeloModel;
 
 public class AutomovelController {
 	
 	private AutomovelModel automovelModel;
+	private ModeloModel modeloModel;
 	
 	public AutomovelController() {
 		this.automovelModel = new AutomovelModel();
+		this.modeloModel = new ModeloModel();
 	}
 	
 	public ArrayList<Automovel> cadastrar(Automovel automovel, ArrayList<Automovel> bdAutomovel) {
@@ -49,6 +53,11 @@ public class AutomovelController {
 	
 	public Automovel buscarPelaPlaca( String placa, ArrayList<Automovel> bdAutomovel){
 		return this.automovelModel.buscarPelaPlaca(placa, bdAutomovel);
+		
+	}
+	
+	public Modelo buscarModelo( String nome, ArrayList<Modelo> bdModelo){
+		return this.modeloModel.buscarPeloNome(nome, bdModelo);
 		
 	}
 	 
