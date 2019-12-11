@@ -1,693 +1,311 @@
-
 package view;
 
-import java.text.ParseException;
+import controller.VendaController;
+import entity.*;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Date;
-
-import controller.VendaController;
-import entity.Automovel;
-import entity.Badeco;
-import entity.Cliente;
-import entity.Funcionario;
-import entity.Venda;
-import entity.Gerente;
 
 public class VendaView {
 
-	private VendaController vendaController;
-	
-	public VendaView() {
-		this.vendaController = new VendaController();
-	}
-	
-	public ArrayList<Venda> menuVenda(ArrayList<Venda> bdVenda, ArrayList<Automovel> bdAutomovel,
-			ArrayList<Cliente> bdCliente, ArrayList<Funcionario> bdFuncionario) {
-	        System.out.println("#Menu Venda");
-	        System.out.println("01- Listar");
-	        System.out.println("02- Cadastrar");
-	        System.out.println("03- Alterar");
-	        System.out.println("04- Buscar");
-	        System.out.println("05- Excluir");
-	        System.out.println("00- Voltar");
+    private VendaController vendaController;
 
-	        Scanner sc = new Scanner(System.in);
-	        int op = sc.nextInt();
+    public VendaView() {
+        this.vendaController = new VendaController();
+    }
 
-	        switch (op){
-	            case 1:
-	            	
-	            	System.out.println("# Lista de Vendas");
-	            	
-	            	List<Venda> vendas = bdVenda;
+    public void menuVenda() {
+        System.out.println("#Menu Venda");
+        System.out.println("01- Listar");
+        System.out.println("02- Cadastrar");
+        System.out.println("03- Alterar");
+        System.out.println("04- Buscar");
+        System.out.println("05- Excluir");
+        System.out.println("06- Relat√≥rio");
+        System.out.println("00- Voltar");
 
-	            	if(vendas.size() < 1) {
-	            		System.out.println("N„o existem vendas cadastradas.");
-	            	}else {
-	            		for(int i = 0; i < vendas.size(); i++) {
-		            		System.out.println(" ID: " + vendas.get(i).getId() + " CÛdigo: " + vendas.get(i).getCod_venda());
-		            	}
-	            	}
-	            	
-	            	menuVenda( bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-	                
-	                break;
-	            case 2:
-	            	Venda venda = null;
-	            	
-	                
-	                System.out.println("# Cadastro de venda ");
-	                
-	                System.out.print("> Informe a placa do Automovel: ");
-	                Automovel auto = vendaController.buscarAutomovel(sc.next(), bdAutomovel);
-	                if(auto == null) {
-	                	System.out.println("Automovel n„o existe");
-	                	menuVenda( bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-	                	break;
-	                }
-	                venda.setAutomovel(auto);
-	                
-	                System.out.print("> Informe o codigo do Cliente: ");
-	                Cliente cliente = vendaController.buscarCliente(sc.nextInt(), bdCliente);
-	                if(auto == null) {
-	                	System.out.println("Cliente n„o existe");
-	                	menuVenda( bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-	                	break;
-	                }
-	                venda.setCliente(cliente);
-	                System.out.print("> Informe o codigo do Funcionario: ");
-	                Funcionario fun = vendaController.buscarFuncionario(sc.nextInt(), bdFuncionario);
-	                if(auto == null) {
-	                	System.out.println("Funcionario n„o existe");
-	                	menuVenda( bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-	                	break;
-	                }
-	                venda.setFuncionario(fun);
-	                try {
-	                    System.out.print("> Informe a data da Venda: ");
-	                    String data = sc.next();
-	                    Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-	                    venda.setDt_venda(dt);
-	                } catch (ParseException e){
-	                    System.out.println(e.getMessage());
-	                }
+        Scanner sc = new Scanner(System.in);
+        int op = sc.nextInt();
 
-	                System.out.println("> Informe o codigo da Venda: ");
-	                int codigo = sc.nextInt();
-	                for(int i = 0; i < bdVenda.size(); i++) {
-	                	if(bdVenda.get(i).getCod_venda() == codigo) {
-	                		System.out.println("Erro: Este cÛdigo j· est· cadastrado.");
-	                		menuVenda( bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-	    	                break;
-	                	}
-	                }
-	                
-	                venda.setCod_venda(codigo);
-	                //sc.nextLine();
-	                
-	                System.out.println("> Informe o valor da Venda: ");
-	                venda.setValor_venda(sc.nextFloat());
-	                venda.setComissao_venda(venda.getValor_venda()/20);
-	                System.out.println("> Comiss„o da venda (5%): "+ venda.getComissao_venda());
-	                
-	                int size = bdVenda.size();
-	            	bdVenda = this.vendaController.cadastrar(venda, bdVenda);
-	            	
-	            	if(bdVenda.size() > size) {
-	            		System.out.println("> Venda cadastrado com sucesso!");
-	            	} else {
-	            		System.out.println("> Erro ao cadastrar venda !");
-	            	}
-	            	menuVenda( bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-	                break;
-	               
-//	            case 3:
-//	            	
-//	            	System.out.println("# Alterar Venda");
-//	            	
-//	            	System.out.println("> Informe o codigo do venda:");
-//	            	sc.nextLine();
-//	            	int altera = sc.nextInt();
-//	            	
-//	            	Venda vendaAltera = this.vendaController.buscarPeloCodigo(altera, bdVenda);
-//	            	
-//	            	if(vendaAltera != null) {
-//	            		System.out.println(" ID: " + vendaAltera.getId()+
-//	            	    " Cargo: "+vendaAltera.getCargo() );
-//	            		if(vendaAltera.getCargo() == "Gerente") {
-//	            			System.out.println("Departamento: "+ ((Gerente)vendaAltera).getDepartamento());
-//	            		}
-//	            		if(vendaAltera.getCargo() == "Badeco") {
-//	            			System.out.println("FunÁ„o: "+ ((Badeco)vendaAltera).getFuncao());
-//	            		}
-//	            		System.out.println(" Nome: " + vendaAltera.getNome()+
-//	            	    " CPF: " + vendaAltera.getCpf()+ " EndereÁo: " + vendaAltera.getEndereco()
-//	            	    + " Telefone: " + vendaAltera.getTelefone()
-//	            	    + " Data de Nascimento: " + vendaAltera.getDt_nascimento()
-//	            	    + " Codigo: " + vendaAltera.getCod_venda()+ " Usuario: " + vendaAltera.getUsuario());
-//	            		
-//	            		
-//	            		System.out.println("> Informe o nome (Alterado): ");
-//		                vendaAltera.setNome(sc.next());
-//
-//		                System.out.println("> Informe o cpf (Alterado): ");
-//		                vendaAltera.setCpf(sc.next());
-//
-//		                System.out.println("> Informe o endereco (Alterado): ");
-//		                vendaAltera.setEndereco(sc.next());
-//
-//		                System.out.println("> Informe o telefone (Alterado): ");
-//		                vendaAltera.setTelefone(sc.next());
-//
-//		                try {
-//		                    System.out.print("> Informe a data de nascimento (Alterado): ");
-//		                    String data = sc.nextLine();
-//		                    Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-//		                    vendaAltera.setDt_nascimento(dt);
-//		                } catch (ParseException e){
-//		                    System.out.println(e.getMessage());
-//		                }
-//
-//		                
-//
-//		                
-//		                System.out.println("> Informe o usuario (Alterado): ");
-//		                vendaAltera.setUsuario(sc.next());
-//
-//		                System.out.println("> Informe a senha (Alterado): ");
-//		                vendaAltera.setSenha(sc.next());
-//		                
-//		                System.out.println("> Informe o sal·rio (Alterado): ");
-//		                vendaAltera.setSalario(vendaAltera.calculaSalario(sc.nextFloat()));
-//		                System.out.println("Sal·rio calculado (Alterado): \n"+vendaAltera.getSalario());
-//		                
-//		                if(vendaAltera.getCargo() == "Gerente") {
-//		                	System.out.println("> Informe o departamento (Alterado): ");
-//		                	((Gerente)vendaAltera).setDepartamento(sc.next());
-//	            		}
-//		                
-//		                if(vendaAltera.getCargo() == "Badeco") {
-//		                	System.out.println("> Informe a funÁ„o (Alterado): ");
-//		                	((Badeco)vendaAltera).setFuncao(sc.next());
-//	            		}
-//	            		
-//	            		this.vendaController.alterar(vendaAltera, bdVenda);
-//	            		
-//	            		
-//	            	} else {
-//	            		System.out.println("> OPS, venda n„o encontrada !");
-//	            	}
-//	            	
-//	            	menuVenda(bdVenda);
-//	            	
-//	                break;
-//	            case 4:
-//	                
-//	            	System.out.println("# Buscar Venda pelo codigo");
-//	            	
-//	            	System.out.println("> Informe o codigo do venda:");
-//	            	sc.nextLine();
-//	            	int busca = sc.nextInt();
-//	            	
-//	            	Venda vendaBusca = this.vendaController.buscarPeloCodigo(busca, bdVenda);
-//	            	
-//	            	if(vendaBusca != null) {
-//	            		System.out.println(" ID: " + vendaBusca.getId()+
-//	            	    " Cargo: "+vendaBusca.getCargo() );
-//	            		if(vendaBusca.getCargo() == "Gerente") {
-//	            			System.out.println("Departamento: "+ ((Gerente)vendaBusca).getDepartamento());
-//	            		}
-//	            		if(vendaBusca.getCargo() == "Badeco") {
-//	            			System.out.println("FunÁ„o: "+ ((Badeco)vendaBusca).getFuncao());
-//	            		}
-//	            		System.out.println(" Nome: " + vendaBusca.getNome()+
-//	            	    " CPF: " + vendaBusca.getCpf()+ " EndereÁo: " + vendaBusca.getEndereco()
-//	            	    + " Telefone: " + vendaBusca.getTelefone()
-//	            	    + " Data de Nascimento: " + vendaBusca.getDt_nascimento()
-//	            	    + " Codigo: " + vendaBusca.getCod_venda()+ " Usuario: " + vendaBusca.getUsuario());
-//		            	
-//	            	} else {
-//	            		System.out.println("> OPS, venda n„o encontrado !");
-//	            	}
-//	            	
-//	            	menuVenda(bdVenda);
-//	                break;
-//	            case 5:
-//	                
-//	            	System.out.println("# Excluir Venda");
-//	            	
-//	            	System.out.println("> Informe o codigo do venda:");
-//	            	
-//	            	int exclui = sc.nextInt();
-//	            	
-//	            	Venda f = vendaController.buscarPeloCodigo(exclui, bdVenda);
-//	            	
-//	            	if(f == null) {
-//	            		System.out.println("Venda n„o existe");;
-//	            		menuVenda(bdVenda);
-//	            		break;
-//	            	}
-//	            	
-//	            	if( this.vendaController.remover(f, bdVenda) != null ) {
-//	            		System.out.println("> Venda excluido com sucesso !");
-//	            	} else {
-//	            		System.out.println("> Venda n„o encontrada !");
-//	            	}
-//	            	
-//	            	menuVenda(bdVenda);
-//	                break;
-	            case 0: default:
-	                break;
-//	        }
-//	        
-//	        return bdVenda;
-//	        //menuVenda();
-//
-	    }
-	        return bdVenda;
+        switch (op){
+            case 1:{
+
+                System.out.println("# Lista de Vendas");
+                List<Venda> listaVendas = vendaController.listar();
+
+                for (Venda v : listaVendas ){
+                    System.out.println("Id:" + v.getId()
+                            + "\n" +"C√≥digo de Venda:" + v.getCod_venda()
+                            + "\n" +"Valor da Venda:" + v.getValor_venda()
+                            + "\n" +"Funcionario:" + v.getFuncionario().getPessoa().getNome()
+                            + "\n" +"Comiss√£o de Venda:" + v.getComissao_venda()
+                            + "\n" +"Cliente:" + v.getCliente().getPessoa().getNome()
+                            + "\n" +"Automovel: " + v.getAutomovel().getModelo().getMarca().getNomeMarca());
+                    System.out.println("************************************************");
+                }
+
+                menuVenda();
+                break;
+            }
+            case 2: {
+                System.out.println("# Cadastrar Venda");
+
+                Venda venda = new Venda();
+
+                System.out.print("> Informe o ID do Automovel: ");
+                int id = sc.nextInt();
+
+                Automovel automovel = new Automovel();
+
+                automovel = vendaController.buscarAutomovel(id);
+                if (automovel == null){
+                    System.out.println("Essa Automovel n√£o existe, tente novamente!");
+                    menuVenda();
+                    break;
+                }else{
+                    System.out.println("> ******************* Automovel Selecionado: ******************* " + "\n");
+                    System.out.println("Marca: " + automovel.getModelo().getMarca().getNomeMarca()
+                            + "\n" +"Modelo selecionado: " + automovel.getModelo().getNomeModelo()
+                             +"\n" +"Tipo: " + automovel.getModelo().getTipo()
+                            +"\n" +"Data de Fabrica√ß√£o: " + automovel.getAno_fabricacao()
+                            +"\n" +"Data do modelo: " + automovel.getAno_modelo()
+                            +"\n" +"Chassi: " + automovel.getChassi() +"\n" +"kilometragem: " + automovel.getKm()
+                            +"\n" +"Placa do Automovel: " + automovel.getPlaca());
+
+                }
+                venda.setAutomovel(automovel);
+
+                System.out.print("> Informe o ID do Cliente: ");
+                Cliente cliente = new Cliente();
+                cliente = this.vendaController.buscarCliente(sc.nextInt());
+
+                if (cliente == null){
+                    System.out.println("Esse Cliente n√£o existe, tente novamente!");
+                    menuVenda();
+                    break;
+                }else{
+                    System.out.println("> ******************* Cliente Selecionado: ******************* " + "\n");
+                    System.out.println("Nome: " + cliente.getPessoa().getNome() + "\n" +"C√≥digo: " + cliente.getCodigo());
+
+                }
+                venda.setCliente(cliente);
+
+                System.out.print("> Informe o ID do Funcionario: ");
+                Funcionario funcionario;
+                funcionario = this.vendaController.buscarFuncionario(sc.nextInt());
+
+                if (funcionario == null){
+                    System.out.println("Esse Funcionario n√£o existe, tente novamente!");
+                    menuVenda();
+                    break;
+                }else{
+                    System.out.println("> ******************* Funcionario Selecionado: ******************* " + "\n");
+                    System.out.println("Nome: " + funcionario.getPessoa().getNome()
+                            + "\n" +"Cargo: " + funcionario.getCargo());
+
+
+                }
+                venda.setFuncionario(funcionario);
+
+
+                System.out.println("Informe o valor da Venda:");
+                venda.setValor_venda(sc.nextFloat());
+                venda.setComissao_venda(venda.getValor_venda()/10);
+
+                System.out.println("Comiss√£o da venda: " + venda.getComissao_venda());
+               
+                
+
+                System.out.println("Informe a Data de Venda:");
+                String dt = new String();
+                dt = sc.next();
+
+                DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+
+                try {
+                    java.util.Date dataUtil = new java.util.Date(fmt.parse(dt).getTime());
+                    java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
+                    venda.setDt_venda(dataSql);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Informe o c√≥digo da Venda:");
+                venda.setCod_venda(sc.nextInt());
+
+
+                if (vendaController.cadastrar(venda)) {
+                    System.out.println("Venda cadastrada!");
+                } else {
+                    System.out.println("Erro ao cadastrar venda, tente novamente!");
+                }
+
+                menuVenda();
+
+                break;
+            }
+            case 3: {
+
+                System.out.println("# Alterar Venda");
+
+                List<Venda> listaAutomoveis = vendaController.listar();
+
+                for (Venda v : listaAutomoveis){
+                    System.out.println("Id:" + v.getId()
+                            + "\n" +"C√≥digo de Venda:" + v.getCod_venda()
+                            + "\n" +"Valor da Venda:" + v.getValor_venda()
+                            + "\n" +"Funcionario:" + v.getFuncionario().getPessoa().getNome()
+                            + "\n" +"Comiss√£o de Venda:" + v.getComissao_venda()
+                            + "\n" +"Cliente:" + v.getCliente().getPessoa().getNome()
+                            + "\n" +"Automovel: " + v.getAutomovel().getModelo().getMarca().getNomeMarca());
+                    System.out.println("************************************************");
+                }
+
+                System.out.println("Informe o id da Venda");
+                Venda venda = vendaController.buscar(sc.nextInt());
+                if (venda == null){
+                    System.out.println("Esse Venda n√£o existe, tente novamente!");
+                    menuVenda();
+                    break;
+                }
+                Venda vendaAlterado = venda;
+
+                System.out.println("> Informe o Valor alterado da Venda:");
+                vendaAlterado.setValor_venda(sc.nextFloat());
+                vendaAlterado.setComissao_venda(vendaAlterado.getValor_venda()/10);
+
+                System.out.println("Informe a nova data da Venda: ");
+                String dt = new String();
+                dt = sc.next();
+
+                DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+
+                try {
+                    java.util.Date dataUtil = new java.util.Date(fmt.parse(dt).getTime());
+                    java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
+                    venda.setDt_venda(dataSql);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Informe o novo c√≥digo da Venda: ");
+                vendaAlterado.setCod_venda(sc.nextInt());
+
+                if (vendaController.alterar(venda.getId(),vendaAlterado)){
+                    System.out.println("Venda alterada!");
+                }else {
+                    System.out.println("Erro ao alterar venda, tente novamente!");
+                }
+                menuVenda();
+
+                break;
+            }
+            case 4: {
+
+                System.out.println("# Buscar Venda pelo Id");
+
+                System.out.println("> Informe o  id do venda:");
+
+                int id = sc.nextInt();
+                Venda v = vendaController.buscar(id);
+                if (v == null) {
+                    System.out.println("Venda n√£o encontrado!");
+                } else {
+                    System.out.println("************************************************");
+                    System.out.println("Id:" + v.getId()
+                            + "\n" +"C√≥digo de Venda:" + v.getCod_venda()
+                            + "\n" +"Valor da Venda:" + v.getValor_venda()
+                            + "\n" +"Funcionario:" + v.getFuncionario().getPessoa().getNome()
+                            + "\n" +"Comiss√£o de Venda:" + v.getComissao_venda()
+                            + "\n" +"Cliente:" + v.getCliente().getPessoa().getNome()
+                            + "\n" +"Automovel: " + v.getAutomovel().getModelo().getMarca().getNomeMarca());
+                    System.out.println("************************************************");
+                }
+
+                menuVenda();
+                break;
+            }
+            case 5: {
+
+                System.out.println("# Excluir Venda");
+
+                System.out.println("> Informe o id do venda:");
+
+                int id = sc.nextInt();
+
+                if(vendaController.remover(id)){
+                    System.out.println("Venda removida com sucesso!");
+                }else {
+                    System.out.println("Erro ao remover venda, tente novamente!");
+                }
+
+                menuVenda();
+                break;
+            }
+
+            case 6:{
+                System.out.println("# Relat√≥rio de Vendas");
+
+                System.out.println("Informe a data de in√≠cio do Relat√≥rio");
+                String dt = new String();
+                dt = sc.next();
+                java.sql.Date inicio = null;
+                java.sql.Date fim = null;
+
+                DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+
+                try {
+                    java.util.Date dataUtil = new java.util.Date(fmt.parse(dt).getTime());
+                    java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
+                    inicio = dataSql;
+
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Inform a data de fim do Relat√≥rio");
+                dt = sc.next();
+
+                try {
+                    java.util.Date dataUtil = new java.util.Date(fmt.parse(dt).getTime());
+                    java.sql.Date dataSql = new java.sql.Date(dataUtil.getTime());
+                    fim = dataSql;
+
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+
+                ArrayList<RelatorioItem> relatorio = vendaController.gerarRelatorio(inicio, fim);
+
+                if(relatorio == null){
+                    System.out.println("N√£o h√° dados para exibir!");
+                    menuVenda();
+                    break;
+                }else{
+                    System.out.println("************************ RELAT√ìRIO DE VENDAS ************************");
+                    System.out.println("DATA INICIAL: "+inicio+"                       DATA FINAL: "+fim);
+                    System.out.println("****************************************************************");
+                    for (RelatorioItem r : relatorio ){
+                        System.out.println("VENDEDOR: " + r.getNome_vendedor()
+                                + "\n" +"TOTAL DE VENDAS: R$ " + r.getTotal_vendas()
+                                + "\n" +"TOTAL DE COMISS√ïES: R$ " + r.getTotal_comissoes());
+                        System.out.println("****************************************************************");
+                    }
+                }
+
+            }
+
+            case 0:
+                break;
+            default:
+                System.out.println("Op√ß√£o invalida");
+                break;
+        }
+
+
+
+    }
+
 }
-	
-}
-
-
-
-//package view;
-//
-//import java.text.ParseException;
-//import java.text.SimpleDateFormat;
-//import java.util.ArrayList;
-//import java.util.Date;
-//import java.util.List;
-//import java.util.Scanner;
-//
-//import controller.VendaController;
-//import entity.Automovel;
-//import entity.Badeco;
-//import entity.Cliente;
-//import entity.Funcionario;
-//import entity.Gerente;
-//import entity.Venda;
-//
-//
-//
-//public class VendaView {
-//
-//	private VendaController vendaController;
-//		
-//	
-//	public VendaView() {
-//		this.vendaController = new VendaController();
-//	}
-//	
-//	public  ArrayList<Venda> menuVenda(ArrayList<Venda> bdVenda, ArrayList<Automovel> bdAutomovel,
-//			ArrayList<Cliente> bdCliente, ArrayList<Funcionario> bdFuncionario) {
-//	        System.out.println("#Menu Venda");
-//	        System.out.println("01- Listar");
-//	        System.out.println("02- Cadastrar");
-//	        System.out.println("03- Alterar");
-//	        System.out.println("04- Buscar");
-//	        System.out.println("05- Excluir");
-//	        System.out.println("00- Voltar");
-//
-//	        @SuppressWarnings("resource")
-//			Scanner sc = new Scanner(System.in);
-//	        int op = sc.nextInt();
-//
-//	        switch (op){
-//	            
-//	        	case 1:{
-//	            	
-//		            	System.out.println("# Lista de Vendas");
-//		            	
-//		            	List<Venda> vendas = bdVenda;
-//	
-//		            	if(vendas.size() < 1) {
-//		            		System.out.println("N„o existem vendas cadastradas.");
-//		            	}else {
-//		            	for(int i = 0; i < bdVenda.size(); i++) {
-//		            		System.out.println(" ID: " + vendas.get(i).getId() + " Marca: " + vendas.get(i).getAutomovel().getModelo().getMarca().getNomeMarca() + 
-//	        				" Modelo: " + vendas.get(i).getAutomovel().getModelo().getNomeModelo() + " Valor da Venda: "+ vendas.get(i).getValor_venda()
-//	                		+ " Cliente: "+ vendas.get(i).getCliente().getNome()+ " Funcionario: "+ vendas.get(i).getFuncionario().getNome()
-//	                		+ " Data da Venda: "+ vendas.get(i).getDt_venda() +  " Comiss„o: "+ vendas.get(i).getComissao_venda());
-//			            	}
-//		            	}
-//		            	menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//		            	break;
-//	                }
-//	                
-//	            case 2: {
-//	            	Venda venda = new Venda();
-//	            	System.out.println("# Cadastrar Venda");
-//	            	
-//	            	System.out.println("# Lista de Automoveis");
-//	            	
-//	            	List<Automovel> automoveis = bdAutomovel;
-//
-//	            	if(automoveis.size() < 1) {
-//	            		System.out.println("N„o existem automoveis cadastrados.");
-//	            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	            		break;
-//	            		
-//	            	}else {
-//	            		for(int i = 0; i < automoveis.size(); i++) {
-//	            			System.out.println(" ID: " + automoveis.get(i).getId() + " MARCA: " + automoveis.get(i).getModelo().getMarca().getNomeMarca() + 
-//    	            		" MODELO: " + automoveis.get(i).getModelo().getNomeModelo() + " COR: "+ automoveis.get(i).getCor()
-//    	            		+ " PLACA: "+ automoveis.get(i).getPlaca()+ " ANO DE FABRICA«√O: "+ automoveis.get(i).getAno_fabricacao()
-//    	            		+ " ANO DO MODELO: "+ automoveis.get(i).getAno_modelo());
-//		            	}
-//	            	}
-//	            	
-//	            	System.out.println("> Informe a placa do AutomÛvel:");
-//	            	String placa = sc.next();
-//	            	
-//	            	Automovel auto = vendaController.buscarAutomovel(placa, bdAutomovel);
-//	            	
-//	            	
-//	            	if(auto == null) {
-//	            		System.out.println("Este automÛvel n„o existe");
-//	            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	            		break;
-//	            	}
-//	            
-//	            	System.out.println("# Lista de Funcionarios");
-//	            	
-//	            	List<Funcionario> funcionarios = bdFuncionario;
-//
-//	            	if(funcionarios.size() < 1) {
-//	            		System.out.println("N„o existem funcionarios cadastradas.");
-//	            	}else {
-//	            		for(int i = 0; i < funcionarios.size(); i++) {
-//		            		System.out.println(" ID: " + funcionarios.get(i).getId()+
-//		            	    " \nCargo: "+funcionarios.get(i).getCargo() );
-//		            		if(funcionarios.get(i).getCargo() == "Gerente") {
-//		            			System.out.println(" Departamento: "+ ((Gerente)funcionarios.get(i)).getDepartamento());
-//		            		}
-//		            		if(funcionarios.get(i).getCargo() == "Badeco") {
-//		            			System.out.println("\nFunÁ„o: "+ ((Badeco)funcionarios.get(i)).getFuncao());
-//		            		}
-//		            		System.out.println(" Nome: " + funcionarios.get(i).getNome()+
-//		            	    " CPF: " + funcionarios.get(i).getCpf()+ " \nEndereÁo: " + funcionarios.get(i).getEndereco()
-//		            	    + " Telefone: " + funcionarios.get(i).getTelefone()
-//		            	    + " Data de Nascimento: " + funcionarios.get(i).getDt_nascimento()
-//		            	    + " Codigo: " + funcionarios.get(i).getCodigo()+ " Usuario: " + funcionarios.get(i).getUsuario());
-//		            	}
-//	            	}
-//	            	
-//	            	
-//	            	System.out.println("> Informe o Codigo do Funcionario:");
-//	            	int codigo = sc.nextInt();
-//	            	
-//	            	Funcionario fun = vendaController.buscarFuncionario(codigo, bdFuncionario);
-//	            	
-//	            	
-//	            	if(fun == null) {
-//	            		System.out.println("Este Funcionario n„o existe");
-//	            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	            		break;
-//	            	}
-//	            	
-//	            	
-//	            	System.out.println("# Lista de Clientes");
-//	            	
-//	            	List<Cliente> clientes = bdCliente;
-//
-//	            	if(clientes.size() < 1) {
-//	            		System.out.println("N„o existem clientes cadastradas.");
-//	            	}else {
-//	            		for(int i = 0; i < clientes.size(); i++) {
-//	            			System.out.println(" ID: " + clientes.get(i).getId()+ "Nome: " + clientes.get(i).getNome()+
-//	        	            	    " CPF: " + clientes.get(i).getCpf()+ " EndereÁo: " + clientes.get(i).getEndereco()
-//	        	            	    + " Telefone: " + clientes.get(i).getTelefone()
-//	        	            	    + " Data de Nascimento: " + clientes.get(i).getDt_nascimento()
-//	        	            	    + " Codigo: " + clientes.get(i).getCodigo());
-//		            	}
-//	            	}
-//	            	
-//	            	System.out.println("> Informe o Codigo do Cliente:");
-//	            	int codigoC = sc.nextInt();
-//	            	
-//	            	Cliente cliente = vendaController.buscarCliente(codigoC, bdCliente);
-//	            	
-//	            	
-//	            	if(cliente == null) {
-//	            		System.out.println("Este Funcionario n„o existe");
-//	            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	            		break;
-//	            	}
-//	            	
-//	            	
-//
-//	                System.out.println("> Informe o codigo da Venda: ");
-//	                int codigoV = sc.nextInt();
-//	                for(int i = 0; i < bdVenda.size(); i++) {
-//	                	if(bdFuncionario.get(i).getCodigo() == codigoV) {
-//	                		System.out.println("Erro: Este cÛdigo j· est· cadastrado.");
-//	                		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	    	                break;
-//	                	}
-//	                }
-//	                
-//	                
-//	                try {
-//	                    System.out.print("> Informe a data de Venda: ");
-//	                    String data = sc.next();
-//	                    Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-//	                    venda.setDt_venda(dt);
-//	                } catch (ParseException e){
-//	                    System.out.println(e.getMessage());
-//	                }
-//	            	
-//	                System.out.print("> Informe o valor da Venda: ");
-//	                float valor = sc.nextFloat();
-//	                venda.setValor_venda(valor);
-//	                venda.setComissao_venda(venda.getValor_venda() / 20);
-//	                
-//	                System.out.print("A Comiss„o dessa venda È (5%) : " + venda.getComissao_venda());
-//	                
-//	            	int size = bdVenda.size();
-//	            	bdVenda = this.vendaController.cadastrar(venda, bdVenda);
-//	            	
-//	            	if(bdVenda.size() > size) {
-//	            		System.out.println("> Venda cadastrada com sucesso!");
-//	            	} else {
-//	            		System.out.println("> Erro ao cadastrar venda !");
-//	            	}
-//	            	
-//	            		            	
-//	            	menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	                break;}
-//	
-//	            case 3:{
-//	            	
-//	            	System.out.println("# Alterar Venda");
-//	            	
-//	            	System.out.println("> Informe a	Placa:");
-//	            	
-//	            	int altera = sc.nextInt();
-//	            	
-//	            	Venda vendaAltera = this.vendaController.buscarPeloCodigo(altera, bdVenda);
-//	            	
-//	            	if(vendaAltera != null) {
-//	            		System.out.println(" ID: " + vendaAltera.getId() + " Marca: " + vendaAltera.getAutomovel().getModelo().getMarca().getNomeMarca() + 
-//	            				" Modelo: " + vendaAltera.getAutomovel().getModelo().getNomeModelo() + " Valor da Venda: "+ vendaAltera.getValor_venda()
-//	    	            		+ " Cliente: "+ vendaAltera.getCliente().getNome()+ " Funcionario: "+ vendaAltera.getFuncionario().getNome()
-//	    	            		+ " Data da Venda: "+ vendaAltera.getDt_venda() +  " Comiss„o: "+ vendaAltera.getComissao_venda());
-//	            		
-//	            		
-//	            		System.out.println("# Lista de Automoveis");
-//		            	
-//		            	List<Automovel> automoveis = bdAutomovel;
-//
-//		            	if(automoveis.size() < 1) {
-//		            		System.out.println("N„o existem automoveis cadastrados.");
-//		            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//		            		break;
-//		            		
-//		            	}else {
-//		            		for(int i = 0; i < automoveis.size(); i++) {
-//		            			System.out.println(" ID: " + automoveis.get(i).getId() + " MARCA: " + automoveis.get(i).getModelo().getMarca().getNomeMarca() + 
-//	    	            		" MODELO: " + automoveis.get(i).getModelo().getNomeModelo() + " COR: "+ automoveis.get(i).getCor()
-//	    	            		+ " PLACA: "+ automoveis.get(i).getPlaca()+ " ANO DE FABRICA«√O: "+ automoveis.get(i).getAno_fabricacao()
-//	    	            		+ " ANO DO MODELO: "+ automoveis.get(i).getAno_modelo());
-//			            	}
-//		            	}
-//		            	
-//		            	System.out.println("> Informe a placa do AutomÛvel(Alterado)(Alterado): ");
-//		            	String placa = sc.next();
-//		            	
-//		            	Automovel auto = vendaController.buscarAutomovel(placa, bdAutomovel);
-//		            	
-//		            	
-//		            	if(auto == null) {
-//		            		System.out.println("Este automÛvel n„o existe");
-//		            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//		            		break;
-//		            	}
-//		            
-//		            	System.out.println("# Lista de Funcionarios");
-//		            	
-//		            	List<Funcionario> funcionarios = bdFuncionario;
-//
-//		            	if(funcionarios.size() < 1) {
-//		            		System.out.println("N„o existem funcionarios cadastradas.");
-//		            	}else {
-//		            		for(int i = 0; i < funcionarios.size(); i++) {
-//			            		System.out.println(" ID: " + funcionarios.get(i).getId()+
-//			            	    " \nCargo: "+funcionarios.get(i).getCargo() );
-//			            		if(funcionarios.get(i).getCargo() == "Gerente") {
-//			            			System.out.println(" Departamento: "+ ((Gerente)funcionarios.get(i)).getDepartamento());
-//			            		}
-//			            		if(funcionarios.get(i).getCargo() == "Badeco") {
-//			            			System.out.println("\nFunÁ„o: "+ ((Badeco)funcionarios.get(i)).getFuncao());
-//			            		}
-//			            		System.out.println(" Nome: " + funcionarios.get(i).getNome()+
-//			            	    " CPF: " + funcionarios.get(i).getCpf()+ " \nEndereÁo: " + funcionarios.get(i).getEndereco()
-//			            	    + " Telefone: " + funcionarios.get(i).getTelefone()
-//			            	    + " Data de Nascimento: " + funcionarios.get(i).getDt_nascimento()
-//			            	    + " Codigo: " + funcionarios.get(i).getCodigo()+ " Usuario: " + funcionarios.get(i).getUsuario());
-//			            	}
-//		            	}
-//		            	
-//		            	
-//		            	System.out.println("> Informe o Codigo do Funcionario(Alterado)(Alterado): ");
-//		            	int codigo = sc.nextInt();
-//		            	
-//		            	Funcionario fun = vendaController.buscarFuncionario(codigo, bdFuncionario);
-//		            	
-//		            	
-//		            	if(fun == null) {
-//		            		System.out.println("Este Funcionario n„o existe");
-//		            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//		            		break;
-//		            	}
-//		            	
-//		            	
-//		            	System.out.println("# Lista de Clientes");
-//		            	
-//		            	List<Cliente> clientes = bdCliente;
-//
-//		            	if(clientes.size() < 1) {
-//		            		System.out.println("N„o existem clientes cadastradas.");
-//		            	}else {
-//		            		for(int i = 0; i < clientes.size(); i++) {
-//		            			System.out.println(" ID: " + clientes.get(i).getId()+ "Nome: " + clientes.get(i).getNome()+
-//		        	            	    " CPF: " + clientes.get(i).getCpf()+ " EndereÁo: " + clientes.get(i).getEndereco()
-//		        	            	    + " Telefone: " + clientes.get(i).getTelefone()
-//		        	            	    + " Data de Nascimento: " + clientes.get(i).getDt_nascimento()
-//		        	            	    + " Codigo: " + clientes.get(i).getCodigo());
-//			            	}
-//		            	}
-//		            	
-//		            	System.out.println("> Informe o Codigo do Cliente(Alterado)(Alterado): ");
-//		            	int codigoC = sc.nextInt();
-//		            	
-//		            	Cliente cliente = vendaController.buscarCliente(codigoC, bdCliente);
-//		            	
-//		            	
-//		            	if(cliente == null) {
-//		            		System.out.println("Este Funcionario n„o existe");
-//		            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//		            		break;
-//		            	}
-//		            	
-//		            	
-//
-//		                System.out.println("> Informe o codigo(Alterado): ");
-//		                int codigoV = sc.nextInt();
-//		                for(int i = 0; i < bdVenda.size(); i++) {
-//		                	if(bdFuncionario.get(i).getCodigo() == codigoV) {
-//		                		System.out.println("Erro: Este cÛdigo j· est· cadastrado.");
-//		                		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//		    	                break;
-//		                	}
-//		                }
-//		                
-//		                
-//		                try {
-//		                    System.out.print("> Informe a data de Venda(Alterado): ");
-//		                    String data = sc.next();
-//		                    Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-//		                    vendaAltera.setDt_venda(dt);
-//		                } catch (ParseException e){
-//		                    System.out.println(e.getMessage());
-//		                }
-//		            	
-//		                System.out.print("> Informe o valor da Venda(Alterado): ");
-//		                float valor = sc.nextFloat();
-//		                vendaAltera.setValor_venda(valor);
-//		                vendaAltera.setComissao_venda(vendaAltera.getValor_venda() / 20);
-//		                
-//		                System.out.print("A Comiss„o dessa vendaAltera È (5%) : " + vendaAltera.getComissao_venda());
-//	            		
-//	            		bdVenda = this.vendaController.alterar(vendaAltera, bdVenda);
-//	            		
-//	            		
-//	            	} else {
-//	            		System.out.println("> OPS, venda n„o encontrada !");
-//	            	}
-//	            	
-//	            	menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	            	
-//	                break;}
-//	            case 4:
-//	                
-//	            	System.out.println("# Buscar Venda pelo codigo");
-//	            	
-//	            	System.out.println("> Informe o codigo da Venda:");
-//	            	sc.nextLine();
-//	            	int busca = sc.nextInt();
-//	            	
-//	            	Venda vendaBusca = this.vendaController.buscarPeloCodigo(busca, bdVenda);
-//	            	
-//	            	if(vendaBusca != null) {
-//	            		System.out.println(" ID: " + vendaBusca.getId() + " Marca: " + vendaBusca.getAutomovel().getModelo().getMarca().getNomeMarca() + 
-//	            				" Modelo: " + vendaBusca.getAutomovel().getModelo().getNomeModelo() + " Valor da Venda: "+ vendaBusca.getValor_venda()
-//	    	            		+ " Cliente: "+ vendaBusca.getCliente().getNome()+ " Funcionario: "+ vendaBusca.getFuncionario().getNome()
-//	    	            		+ " Data da Venda: "+ vendaBusca.getDt_venda() +  " Comiss„o: "+ vendaBusca.getComissao_venda());
-//	            	
-//	            	} else {
-//	            		System.out.println("> OPS, venda n„o encontrado !");
-//	            	}
-//	            	menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	            	
-//	                break;
-//	            case 5:
-//	                
-//	            	System.out.println("# Excluir Venda");
-//	            	
-//	            	System.out.println("> Informe o codigo do venda:");
-//	            	
-//	            	int exclui = sc.nextInt();
-//	            	
-//	            	Venda v = vendaController.buscarPeloCodigo(exclui, bdVenda);
-//	            	
-//	            	if(v == null) {
-//	            		System.out.println("Venda n„o existe");;
-//	            		menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	            		break;
-//	            	}
-//	            	
-//	            	int size = bdVenda.size();
-//	            	bdVenda = this.vendaController.remover(v, bdVenda);
-//	            	
-//	            	if( bdVenda.size() < size ) {
-//	            		System.out.println("> Venda excluida com sucesso !");
-//	            	} else {
-//	            		System.out.println("> Venda n„o encontrada !");
-//	            	}
-//	            	
-//	            	menuVenda(bdVenda, bdAutomovel, bdCliente, bdFuncionario);
-//	                break;
-//	                
-//	            case 0: default:
-//	            	break;
-//	        }
-//	        
-//	        return bdVenda;
-//
-//	    }
-//
-//}

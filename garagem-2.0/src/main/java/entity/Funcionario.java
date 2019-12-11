@@ -1,47 +1,64 @@
 package entity;
 
-public class Funcionario extends Pessoa {
+public class Funcionario {
 	
-	private int codigof;
+	private  int id;
 	private String usuario;
 	private String senha;
 	private float salario;
 	private String cargo;
-	
-	
-	public String getCargo() {
-		return cargo;
+	private Pessoa pessoa;
+
+	public int getId() {
+		return id;
 	}
-	public void setCargo(String cargo) {
-		this.cargo = cargo;
+
+	public void setId(int id) {
+		this.id = id;
 	}
-	public int getCodigo() {
-		return codigof;
-	}
-	public void setCodigo(int codigo) {
-		this.codigof = codigo;
-	}
+
 	public String getUsuario() {
 		return usuario;
 	}
+
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
+
 	public String getSenha() {
 		return senha;
 	}
+
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+
 	public float getSalario() {
 		return salario;
 	}
+
 	public void setSalario(float salario) {
 		this.salario = salario;
 	}
-	
+
+	public String getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
 	public float calculaSalario(float salario) {
-		return this.salario*1;
+		return (salario)*1;
 	}
 
 }

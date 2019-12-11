@@ -1,74 +1,69 @@
 package controller;
 
+import entity.*;
+import model.*;
+
+
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.Automovel;
-import entity.Cliente;
-import entity.Funcionario;
-import entity.Marca;
-import entity.Venda;
-import model.AutomovelModel;
-import model.ClienteModel;
-import model.FuncionarioModel;
-import model.VendaModel;
-import view.ClienteView;
-
 public class VendaController {
-	
-	private VendaModel vendaModel;
-	private AutomovelModel automovelModel;
-	private FuncionarioModel funcionarioModel;
-	private ClienteModel clienteModel;
-	
-	public VendaController() {
-		this.vendaModel = new VendaModel();
-		this.automovelModel = new AutomovelModel();
-		this.funcionarioModel = new FuncionarioModel();
-		this.clienteModel = new ClienteModel();
-	}
-	
-	public ArrayList<Venda> cadastrar(Venda venda, ArrayList<Venda> bdVenda) {
-		
-		this.vendaModel.cadastrar(venda, bdVenda);
-		
-		
-		return bdVenda;
-		
-		
-		// return this.vendaModel.cadastrar(venda);
-	}
-	
-	public ArrayList<Venda> alterar(Venda venda, ArrayList<Venda> bdVenda) {
-		return this.vendaModel.alterar(venda, bdVenda);
-	}
-	
-	public ArrayList<Venda> remover(Venda v, ArrayList<Venda> bdVenda) {
-			return this.vendaModel.remover(v, bdVenda);
-	}
-	
-//	public List<Venda> listar(){
-//		return this.vendaModel.listar();
-//		
-//	}
-	
-	public Venda buscarPeloCodigo( int codigo, ArrayList<Venda> bdVenda){
-		return this.vendaModel.buscarPeloCodigo(codigo, bdVenda);
-		
-	}
-	 
-	public Automovel buscarAutomovel( String placa , ArrayList<Automovel> bdAutomovel){
-		return this.automovelModel.buscarPelaPlaca(placa, bdAutomovel);
-				
-	}
-	
-	public Funcionario buscarFuncionario( int codigo, ArrayList<Funcionario> bdFuncionario){
-		return this.funcionarioModel.buscarPeloCodigo(codigo, bdFuncionario);
-		
-	}
-	
-	public Cliente buscarCliente( int codigo, ArrayList<Cliente> bdCliente){
-		return this.clienteModel.buscarPeloCodigo(codigo, bdCliente);
-		
-	}
+
+    private VendaModel vendaModel;
+    private ModeloModel modeloModel;
+    private AutomovelModel automovelModel;
+    private ClienteModel clienteModel;
+    private FuncionarioModel funcionarioModel;
+    public VendaController() {
+        this.vendaModel = new VendaModel();
+        this.modeloModel = new ModeloModel();
+        this.automovelModel = new AutomovelModel();
+        this.clienteModel = new ClienteModel();
+        this.funcionarioModel = new FuncionarioModel();
+    }
+
+    public boolean cadastrar(Venda venda) {
+        return vendaModel.cadastrar(venda);
+    }
+
+    public List<Venda> listar(){
+        return vendaModel.listar();
+    }
+
+    public boolean alterar(int idVenda, Venda venda) {
+        return this.vendaModel.alterar(idVenda,venda);
+    }
+
+    public boolean remover(int id) {
+        return  vendaModel.remover(id);
+    }
+
+
+    public Venda buscar(int id){
+        return this.vendaModel.buscar(id);
+    }
+
+
+    public Automovel buscarAutomovel(int id){
+
+        return this.automovelModel.buscar(id);
+
+    }
+
+    public Cliente buscarCliente(int id){
+
+        return this.clienteModel.buscar(id);
+
+    }
+
+    public Funcionario buscarFuncionario(int id){
+
+        return this.funcionarioModel.buscar(id);
+
+    }
+
+    public ArrayList<RelatorioItem> gerarRelatorio(Date inicio, Date fim) {
+        return vendaModel.relatorio(inicio,fim);
+    }
 }

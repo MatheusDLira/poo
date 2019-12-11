@@ -1,11 +1,10 @@
 package view;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import controller.MarcaController;
 import entity.Marca;
+
+import java.util.List;
+import java.util.Scanner;
 
 public class MarcaView {
 
@@ -15,7 +14,7 @@ public class MarcaView {
 		this.marcaController = new MarcaController();
 	}
 	
-	public ArrayList<Marca> menuMarca(ArrayList<Marca> bdMarca) {
+	public void menuMarca() {
 	        System.out.println("#Menu Marca");
 	        System.out.println("01- Listar");
 	        System.out.println("02- Cadastrar");
@@ -28,115 +27,119 @@ public class MarcaView {
 	        int op = sc.nextInt();
 
 	        switch (op){
-	            case 1:
+	            case 1:{
 	            	
 	            	System.out.println("# Lista de Marcas");
-	            	
-	            	List<Marca> marcas = bdMarca;
 
-	            	if(marcas.size() < 1) {
-	            		System.out.println("N„o existem marcas cadastradas.");
-	            	}else {
-	            		for(int i = 0; i < marcas.size(); i++) {
-		            		System.out.println(" ID: " + marcas.get(i).getId() + " NOME: " + marcas.get(i).getNomeMarca());
-		            	}
-	            	}
-	            	
-	            	menuMarca(bdMarca);
-	                
+					List<Marca> listaMarcas = marcaController.listar();
+
+					for (Marca m : listaMarcas){
+						System.out.println("Id: "+m.getId()+"\n" + "Nome: "+m.getNomeMarca());
+						System.out.println("************************************************");
+					}
+
+
+					menuMarca();
 	                break;
-	            case 2:
-	            	System.out.println("# Cadastrar Marca");
-	            	
-	            
-	            	System.out.println("> Informe a marca:");
-	            	sc.nextLine();
-	            	String nome = sc.nextLine();
-	            	
-	            	Marca marca = new Marca();
-	            	marca.setNomeMarca(nome);
-	            	
-	            	int size = bdMarca.size();
-	            	
-	            	
-	            	bdMarca = this.marcaController.cadastrar(marca, bdMarca);
-	            	
-	            	if(bdMarca.size() > size) {
-	            		System.out.println("> Marca cadastrada com sucesso!");
-	            	} else {
-	            		System.out.println("> Erro ao cadastrar marca !");
-	            	}
-	            	menuMarca(bdMarca);
-	                
-	                break;
-	            case 3:
-	            	
+	            }
+	            case 2: {
+					System.out.println("# Cadastrar Marca");
+
+
+					System.out.println("> Informe a marca:");
+					sc.nextLine();
+					String nome = sc.nextLine();
+
+					Marca marca = new Marca();
+					marca.setNomeMarca(nome);
+
+					if (marcaController.cadastrar(marca)) {
+						System.out.println("Marca cadastrada!");
+					} else {
+						System.out.println("Erro ao cadastrar marca, tente novamente!");
+					}
+
+					menuMarca();
+
+					break;
+				}
+	            case 3: {
+
 	            	System.out.println("# Alterar Marca");
+
+					List<Marca> listaMarcas = marcaController.listar();
+
+					for (Marca m : listaMarcas){
+						System.out.println("Id: "+m.getId()+"\n" + "Nome: "+m.getNomeMarca());
+						System.out.println("************************************************");
+					}
 	            	
-	            	System.out.println("> Informe a marca:");
-	            	sc.nextLine();
-	            	String altera = sc.nextLine();
-	            	
-	            	Marca marcaAltera = this.marcaController.buscarPeloNome(altera, bdMarca);
-	            	
-	            	if(marcaAltera != null) {
-	            		System.out.println(" ID: " + marcaAltera.getId() + " NOME: " + marcaAltera.getNomeMarca());
-	            		
-	            		
-	            		System.out.println("> Informe a marca(alterada):");
-		            	
-	            		marcaAltera.setNomeMarca(sc.nextLine());
-	            		
-	            		this.marcaController.alterar(marcaAltera, bdMarca);
-	            		
-	            		
-	            	} else {
-	            		System.out.println("> OPS, marca n„o encontrada !");
-	            	}
-	            	
-	            	menuMarca(bdMarca);
-	            	
+	            	System.out.println("> Informe o id marca:");
+	            	int idMarca = sc.nextInt();
+
+	            	Marca marca = marcaController.buscar(idMarca);
+					if (marca == null){
+						System.out.println("Essa Marca n√£o existe, tente novamente!");
+						menuMarca();
+					}
+
+					System.out.println("> Informe o novo nome da marca:");
+					sc.nextLine();
+					String nomeMarcaAlterada = sc.nextLine();
+
+	            	if (marcaController.alterar(idMarca,nomeMarcaAlterada)){
+						System.out.println("Marca alterada!");
+					}else {
+						System.out.println("Erro ao alterar marca, tente novamente!");
+					}
+
+
+					break;
+				}
+	            case 4: {
+
+					System.out.println("# Buscar Marca pelo Id");
+
+					System.out.println("> Informe o  id da marca:");
+
+					int id = sc.nextInt();
+					Marca m = marcaController.buscar(id);
+					if (m == null) {
+						System.out.println("Marca n√£o encontrada!");
+					} else {
+						System.out.println("************************************************");
+						System.out.println("Id: " + m.getId() + "\n" + "Nome: " + m.getNomeMarca());
+						System.out.println("************************************************");
+					}
+
+					menuMarca();
+					break;
+				}
+	            case 5: {
+
+					System.out.println("# Excluir Marca");
+
+					System.out.println("> Informe o id da marca:");
+
+					int id = sc.nextInt();
+
+					if(marcaController.remover(id)){
+						System.out.println("Marca removida com sucesso!");
+					}else {
+						System.out.println("Erro ao remover marca, tente novamente!");
+					}
+
+					menuMarca();
+					break;
+				}
+	            case 0:
 	                break;
-	            case 4:
-	                
-	            	System.out.println("# Buscar Marca pelo nome");
-	            	
-	            	System.out.println("> Informe a marca:");
-	            	sc.nextLine();
-	            	String busca = sc.nextLine();
-	            	
-	            	Marca marcaBusca = this.marcaController.buscarPeloNome(busca, bdMarca);
-	            	
-	            	if(marcaBusca != null) {
-	            		System.out.println(" ID: " + marcaBusca.getId() + " NOME: " + marcaBusca.getNomeMarca());
-	            	} else {
-	            		System.out.println("> OPS, marca n„o encontrada !");
-	            	}
-	            	
-	            	menuMarca(bdMarca);
-	                break;
-	            case 5:
-	                
-	            	System.out.println("# Excluir Marca");
-	            	
-	            	System.out.println("> Informe a marca:");
-	            	sc.nextLine();
-	            	String exclui = sc.nextLine();
-	            	
-	            	if( this.marcaController.remover(exclui, bdMarca) != null ) {
-	            		System.out.println("> Marca excluida com sucesso !");
-	            	} else {
-	            		System.out.println("> Marca n„o encontrada !");
-	            	}
-	            	
-	            	menuMarca(bdMarca);
-	                break;
-	            case 0: default:
-	                break;
+				default:
+					System.out.println("Op√ß√£o invalida");
+					break;
 	        }
-	        
-	        return bdMarca;
-	        //menuMarca();
+
+
 
 	    }
 

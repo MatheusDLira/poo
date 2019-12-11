@@ -1,55 +1,56 @@
 package controller;
 
+import entity.Pessoa;
+import entity.Funcionario;
+import model.PessoaModel;
+import model.FuncionarioModel;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.Funcionario;
-import model.FuncionarioModel;
-
 public class FuncionarioController {
-	
+
 	private FuncionarioModel funcionarioModel;
-	
+	private PessoaModel pessoaModel;
 	public FuncionarioController() {
 		this.funcionarioModel = new FuncionarioModel();
+		this.pessoaModel = new PessoaModel();
 	}
-	
-	public ArrayList<Funcionario> cadastrar(Funcionario funcionario, ArrayList<Funcionario> bdFuncionario) {
-		
-		this.funcionarioModel.cadastrar(funcionario, bdFuncionario);
-		
-		
-		return bdFuncionario;
-		
-		
-		// return this.funcionarioModel.cadastrar(funcionario);
+
+	public boolean cadastrar(Funcionario funcionario) {
+		return funcionarioModel.cadastrar(funcionario);
 	}
-	
-	public ArrayList<Funcionario> alterar(Funcionario funcionario, ArrayList<Funcionario> bdFuncionario) {
-		return this.funcionarioModel.alterar(funcionario, bdFuncionario);
+
+	public List<Funcionario> listar(){
+		return funcionarioModel.listar();
 	}
-	
-	public ArrayList<Funcionario> remover(Funcionario f, ArrayList<Funcionario> bdFuncionario) {
-		
-		Funcionario funcionario = this.funcionarioModel.buscarPeloCodigo(f.getCodigo(), bdFuncionario);
-		
-		if(funcionario != null ) {
-			return this.funcionarioModel.remover(funcionario, bdFuncionario);
-		} else {
-			return null;
-		}
+
+	public boolean alterar(int idFuncionario, Funcionario funcionario) {
+		return this.funcionarioModel.alterar(idFuncionario,funcionario);
+	}
+
+	public boolean remover(Funcionario f) {
+		return  funcionarioModel.remover(f);
+	}
+
+
+	public Funcionario buscar(int id){
+		return this.funcionarioModel.buscar(id);
+	}
+
+
+	public Pessoa buscarPessoa(int id){
+
+		return this.pessoaModel.buscar(id);
 
 	}
-	
-//	public List<Funcionario> listar(){
-//		return this.funcionarioModel.listar();
-//		
-//	}
-	
-	public Funcionario buscarPeloCodigo( int codigo, ArrayList<Funcionario> bdFuncionario){
-		return this.funcionarioModel.buscarPeloCodigo(codigo, bdFuncionario);
-		
-	}
-	 
 
+	public boolean verificaSalarioBadeco(float salario) {
+		return  this.funcionarioModel.verificarSalarioBadeco(salario);
+	}
+
+	public boolean verificaSalarioFuncionario(float salario) {
+		return  this.funcionarioModel.verificaSalarioFuncionario(salario);
+	}
 }

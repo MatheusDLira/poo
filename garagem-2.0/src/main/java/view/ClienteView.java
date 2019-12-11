@@ -1,213 +1,171 @@
 package view;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Date;
-
 import controller.ClienteController;
-import entity.Badeco;
+import entity.Pessoa;
 import entity.Cliente;
-import entity.Gerente;
+
+import java.util.List;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class ClienteView {
 
-	private ClienteController clienteController;
-	
-	public ClienteView() {
-		this.clienteController = new ClienteController();
-	}
-	
-	public ArrayList<Cliente> menuCliente(ArrayList<Cliente> bdCliente) {
-	        System.out.println("#Menu Cliente");
-	        System.out.println("01- Listar");
-	        System.out.println("02- Cadastrar");
-	        System.out.println("03- Alterar");
-	        System.out.println("04- Buscar");
-	        System.out.println("05- Excluir");
-	        System.out.println("00- Voltar");
+    private ClienteController clienteController;
 
-	        Scanner sc = new Scanner(System.in);
-	        int op = sc.nextInt();
+    public ClienteView() {
+        this.clienteController = new ClienteController();
+    }
 
-	        switch (op){
-	            case 1:
-	            	
-	            	System.out.println("# Lista de Clientes");
-	            	
-	            	List<Cliente> clientes = bdCliente;
+    public void menuCliente() {
+        System.out.println("#Menu Cliente");
+        System.out.println("01- Listar");
+        System.out.println("02- Cadastrar");
+        System.out.println("03- Alterar");
+        System.out.println("04- Buscar");
+        System.out.println("05- Excluir");
+        System.out.println("00- Voltar");
 
-	            	if(clientes.size() < 1) {
-	            		System.out.println("N„o existem clientes cadastradas.");
-	            	}else {
-	            		for(int i = 0; i < clientes.size(); i++) {
-	            			System.out.println(" ID: " + clientes.get(i).getId()+ "Nome: " + clientes.get(i).getNome()+
-	        	            	    " CPF: " + clientes.get(i).getCpf()+ " EndereÁo: " + clientes.get(i).getEndereco()
-	        	            	    + " Telefone: " + clientes.get(i).getTelefone()
-	        	            	    + " Data de Nascimento: " + clientes.get(i).getDt_nascimento()
-	        	            	    + " Codigo: " + clientes.get(i).getCodigo());
-		            	}
-	            	}
-	            	
-	            	menuCliente(bdCliente);
-	                
-	                break;
-	            case 2:
-	            	Cliente cliente = new Cliente();
-	            	
-	                
-	                System.out.println("# Cadastro de cliente ");
-	                
-	                System.out.println("> Informe o nome: ");
-	                cliente.setNome(sc.next());
+        Scanner sc = new Scanner(System.in);
+        int op = sc.nextInt();
 
-	                System.out.println("> Informe o cpf: ");
-	                cliente.setCpf(sc.next());
+        switch (op){
+            case 1:{
 
-	                System.out.println("> Informe o endereco: ");
-	                cliente.setEndereco(sc.next());
+                System.out.println("# Lista de Clientes");
 
-	                System.out.println("> Informe o telefone: ");
-	                cliente.setTelefone(sc.next());
+                List<Cliente> listaClientes = clienteController.listar();
 
-	                try {
-	                    System.out.print("> Informe a data de nascimento: ");
-	                    String data = sc.next();
-	                    Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-	                    cliente.setDt_nascimento(dt);
-	                } catch (ParseException e){
-	                    System.out.println(e.getMessage());
-	                }
+                for (Cliente m : listaClientes){
+                    System.out.println("Id: "+m.getId()+"\n" + "Nome: "+m.getPessoa().getNome() +
+                            "\n" +"CPF: "+m.getPessoa().getCpf() +"\n" + "Endere√ßo: "+m.getPessoa().getEndereco()
+                            +"\n" + "Telefone: "+m.getPessoa().getTelefone()
+                            +"\n" + "Data de Nascimento: "+m.getPessoa().getDt_nascimento() +
+                            "\n" + "C√≥digo do Cliente: "+m.getCodigo());
+                    System.out.println("************************************************");
+                }
 
-	                System.out.println("> Informe o codigo: ");
-	                int codigo = sc.nextInt();
-	                for(int i = 0; i < bdCliente.size(); i++) {
-	                	if(bdCliente.get(i).getCodigo() == codigo) {
-	                		System.out.println("Erro: Este cÛdigo j· est· cadastrado.");
-	                		menuCliente(bdCliente);
-	    	                break;
-	                	}
-	                }
-	                
-	                cliente.setCodigo(codigo);
-	                //sc.nextLine();
-	                
-	                int size = bdCliente.size();
-	            	bdCliente = this.clienteController.cadastrar(cliente, bdCliente);
-	            	
-	            	if(bdCliente.size() > size) {
-	            		System.out.println("> Cliente cadastrado com sucesso!");
-	            	} else {
-	            		System.out.println("> Erro ao cadastrar cliente !");
-	            	}
-	            	menuCliente(bdCliente);
-	                break;
-	               
-	            case 3:
-	            	
-	            	System.out.println("# Alterar Cliente");
-	            	
-	            	System.out.println("> Informe o codigo do cliente:");
-	            	sc.nextLine();
-	            	int altera = sc.nextInt();
-	            	
-	            	Cliente clienteAltera = this.clienteController.buscarPeloCodigo(altera, bdCliente);
-	            	
-	            	if(clienteAltera != null) {
-	            		System.out.println(" ID: " + clienteAltera.getId()+ " Nome: " + clienteAltera.getNome()+
-	    	            	    " CPF: " + clienteAltera.getCpf()+ " EndereÁo: " + clienteAltera.getEndereco()
-	    	            	    + " Telefone: " + clienteAltera.getTelefone()
-	    	            	    + " Data de Nascimento: " + clienteAltera.getDt_nascimento()
-	    	            	    + " Codigo: " + clienteAltera.getCodigo());
-	            		
-	            		
-	            		System.out.println("> Informe o nome (Alterado): ");
-		                clienteAltera.setNome(sc.next());
 
-		                System.out.println("> Informe o cpf (Alterado): ");
-		                clienteAltera.setCpf(sc.next());
+                menuCliente();
+                break;
+            }
+            case 2: {
+                System.out.println("# Cadastrar Cliente");
 
-		                System.out.println("> Informe o endereco (Alterado): ");
-		                clienteAltera.setEndereco(sc.next());
+                Cliente cliente = new Cliente();
 
-		                System.out.println("> Informe o telefone (Alterado): ");
-		                clienteAltera.setTelefone(sc.next());
+                System.out.println("> Informe o ID da Pessoa:");
+                int id = sc.nextInt();
 
-		                try {
-		                    System.out.print("> Informe a data de nascimento (Alterado): ");
-		                    String data = sc.nextLine();
-		                    Date dt = new SimpleDateFormat("dd/MM/yyyy").parse(data);
-		                    clienteAltera.setDt_nascimento(dt);
-		                } catch (ParseException e){
-		                    System.out.println(e.getMessage());
-		                }
-	            		
-	            		this.clienteController.alterar(clienteAltera, bdCliente);
-	            		
-	            		
-	            	} else {
-	            		System.out.println("> OPS, cliente n„o encontrado !");
-	            	}
-	            	
-	            	menuCliente(bdCliente);
-	            	
-	                break;
-	            case 4:
-	                
-	            	System.out.println("# Buscar Cliente pelo codigo");
-	            	
-	            	System.out.println("> Informe o codigo do cliente:");
-	            	sc.nextLine();
-	            	int busca = sc.nextInt();
-	            	
-	            	Cliente clienteBusca = this.clienteController.buscarPeloCodigo(busca, bdCliente);
-	            	
-	            	if(clienteBusca != null) {
-	            		System.out.println(" ID: " + clienteBusca.getId()+ "Nome: " + clienteBusca.getNome()+
-	            	    " CPF: " + clienteBusca.getCpf()+ " EndereÁo: " + clienteBusca.getEndereco()
-	            	    + " Telefone: " + clienteBusca.getTelefone()
-	            	    + " Data de Nascimento: " + clienteBusca.getDt_nascimento()
-	            	    + " Codigo: " + clienteBusca.getCodigo()+ " Usuario: ");
-		            	
-	            	} else {
-	            		System.out.println("> OPS, cliente n„o encontrado !");
-	            	}
-	            	
-	            	menuCliente(bdCliente);
-	                break;
-	            case 5:
-	                
-	            	System.out.println("# Excluir Cliente");
-	            	
-	            	System.out.println("> Informe o codigo do cliente:");
-	            	
-	            	int exclui = sc.nextInt();
-	            	
-	            	Cliente f = clienteController.buscarPeloCodigo(exclui, bdCliente);
-	            	
-	            	if(f == null) {
-	            		System.out.println("Cliente n„o existe");;
-	            		menuCliente(bdCliente);
-	            		break;
-	            	}
-	            	
-	            	if( this.clienteController.remover(f, bdCliente) != null ) {
-	            		System.out.println("> Cliente excluido com sucesso !");
-	            	} else {
-	            		System.out.println("> Cliente n„o encontrado !");
-	            	}
-	            	
-	            	menuCliente(bdCliente);
-	                break;
-	            case 0: default:
-	                break;
-	        }
-	        
-	        return bdCliente;
-	        //menuCliente();
+                Pessoa pessoa = new Pessoa();
+                pessoa = clienteController.buscarPessoa(id);
+                if (pessoa == null){
+                    System.out.println("Essa Pessoa n√£o existe, tente novamente!");
+                    menuCliente();
+                }else{
+                    System.out.println("Pessoa selecionada: " + pessoa.getNome());
 
-	    }
+                }
+                cliente.setPessoa(pessoa);
+
+                System.out.println("Informe o Codigo do Cliente: ");
+                cliente.setCodigo(sc.nextInt());
+
+                if (clienteController.cadastrar(cliente)) {
+                    System.out.println("Cliente cadastrada!");
+                } else {
+                    System.out.println("Erro ao cadastrar cliente, tente novamente!");
+                }
+
+                menuCliente();
+
+                break;
+            }
+            case 3: {
+
+                System.out.println("# Alterar Cliente");
+
+                List<Cliente> listaClientes = clienteController.listar();
+
+                for (Cliente m : listaClientes){
+                    System.out.println("Id: "+m.getId()+"\n" + "Nome: "+m.getPessoa().getNome() +
+                                    "\n" +"CPF: "+m.getPessoa().getCpf() +"\n" + "Endere√ßo: "+m.getPessoa().getEndereco()
+                                    +"\n" + "Telefone: "+m.getPessoa().getTelefone()
+                                    +"\n" + "Data de Nascimento: "+m.getPessoa().getDt_nascimento() +
+                            "\n" + "C√≥digo do Cliente: "+m.getCodigo());
+                    System.out.println("************************************************");
+                }
+
+                System.out.println("> Informe o id cliente:");
+                int idCliente = sc.nextInt();
+
+                Cliente cliente = clienteController.buscar(idCliente);
+                if (cliente == null){
+                    System.out.println("Esse Cliente n√£o existe, tente novamente!");
+                    menuCliente();
+                }
+                Cliente clienteAlterado = new Cliente();
+
+                System.out.println("Informe o Codigo do Cliente: ");
+                cliente.setCodigo(sc.nextInt());
+
+                if (clienteController.alterar(idCliente,clienteAlterado)){
+                    System.out.println("Cliente alterada!");
+                }else {
+                    System.out.println("Erro ao alterar cliente, tente novamente!");
+                }
+                menuCliente();
+
+                break;
+            }
+            case 4: {
+
+                System.out.println("# Buscar Cliente pelo Id");
+
+                System.out.println("> Informe o  id do cliente:");
+
+                int id = sc.nextInt();
+                Cliente m = clienteController.buscar(id);
+                if (m == null) {
+                    System.out.println("Cliente n√£o encontrado!");
+                } else {
+                    System.out.println("************************************************");
+                    System.out.println("Id: "+m.getId()+"\n" + "Nome: "+m.getPessoa().getNome() +
+                            "\n" +"CPF: "+m.getPessoa().getCpf() +"\n" + "Endere√ßo: "+m.getPessoa().getEndereco()
+                            +"\n" + "Telefone: "+m.getPessoa().getTelefone()
+                            +"\n" + "Data de Nascimento: "+m.getPessoa().getDt_nascimento() +
+                            "\n" + "C√≥digo do Cliente: "+m.getCodigo());
+                    System.out.println("************************************************");
+                }
+
+                menuCliente();
+                break;
+            }
+            case 5: {
+
+                System.out.println("# Excluir Cliente");
+
+                System.out.println("> Informe o id do cliente:");
+
+                int id = sc.nextInt();
+
+                if(clienteController.remover(id)){
+                    System.out.println("Cliente removida com sucesso!");
+                }else {
+                    System.out.println("Erro ao remover cliente, tente novamente!");
+                }
+
+                menuCliente();
+                break;
+            }
+            case 0:
+                break;
+            default:
+                System.out.println("Op√ß√£o invalida");
+                break;
+        }
+
+
+
+    }
 
 }

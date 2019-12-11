@@ -1,62 +1,129 @@
 package model;
 
+import config.SQLConnection;
+import entity.Marca;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.Marca;
-
 public class MarcaModel {
-	
-	//private List<Marca> bdMarca;
-	
-//	public MarcaModel() {
-//		bdMarca = new ArrayList<Marca>();
-//	}
-	
-	public ArrayList<Marca> cadastrar(Marca marca, ArrayList<Marca> bdMarca) {
-		
-		int id = bdMarca.size() + 1;
-		marca.setId(id);
-		
-		bdMarca.add(marca);
-		
-		return bdMarca;
+
+        Connection connection;
+	public MarcaModel(){
+		 connection = SQLConnection.getConnection();
 	}
 	
-	public ArrayList<Marca> alterar(Marca marca, ArrayList<Marca> bdMarca) {
-		
-		int index = bdMarca.indexOf(marca);
-		
-		bdMarca.set(index, marca);
-		
-		return bdMarca;
+	public boolean cadastrar(Marca marca) {
+
+		String sql = "INSERT INTO garagem.marca (nomeMarca) VALUES (?)";
+		boolean marcaCadastrada = false;
+
+		try {
+			PreparedStatement ps  = connection.prepareStatement(sql);
+			ps.setString(1, marca.getNomeMarca());
+
+			ps.execute();
+
+			marcaCadastrada = true;
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+
+		return marcaCadastrada;
+
+	}
+
+	public List<Marca> listar(){
+		String sql = "select * from marca";
+		PreparedStatement ps = null;
+		ResultSet resultset = null;
+		ArrayList<Marca> listaMarcas = new ArrayList<Marca>();
+		try {
+
+			ps = connection.prepareStatement(sql);
+			resultset = ps.executeQuery();
+
+			while (resultset.next()){
+				Marca marca = new Marca();
+				marca.setNomeMarca(resultset.getString("nomeMarca"));
+				marca.setId(resultset.getInt("id"));
+				listaMarcas.add(marca);
+			}
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return listaMarcas;
 	}
 	
-	public ArrayList<Marca> remover(Marca marca, ArrayList<Marca> bdMarca) {
-		bdMarca.remove(marca);
-		return bdMarca;
+	public boolean alterar(int idMarca, String nomeMarcaAlterada) {
+
+		String sql = "update marca set nomeMarca = ? where id = ?";
+		PreparedStatement ps = null;
+		boolean marcaAtualizada = false;
+		try {
+			ps = connection.prepareStatement(sql);
+			ps.setString(1,nomeMarcaAlterada);
+			ps.setInt(2,idMarca);
+			ps.execute();
+			marcaAtualizada = true;
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return marcaAtualizada;
+	}
+	
+	public boolean remover(int id) {
+		String sql = "delete from marca where id = ?";
+		PreparedStatement ps = null;
+		boolean deletar = false;
+		try {
+			ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			ps.execute();
+			deletar = true;
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return deletar;
 	}
 	
 //	public List<Marca> listar(){
 //		return this.bdMarca;
 //	}
 	
-	public Marca buscarPeloNome( String nome, ArrayList<Marca> bdMarca ){
-		
-		/*for(int i = 0; i < bdMarca.size(); i++) {
-    		
-			bdMarca.get(i)
-			
-    	}*/
-		
-		for(Marca marca : bdMarca) {
-			
-			if(marca.getNomeMarca().equals(nome)) {
+	public Marca buscar(int id){
+
+		String sql = "select * from marca where id = ?";
+		PreparedStatement ps = null;
+		ResultSet resultset = null;
+		Marca marca = new Marca();
+		try {
+
+
+			ps = connection.prepareStatement(sql);
+			ps.setInt(1,id);
+			resultset = ps.executeQuery();
+
+			if (resultset.next()){
+
+				marca.setNomeMarca(resultset.getString("nomeMarca"));
+				marca.setId(resultset.getInt("id"));
 				return marca;
+
+			}else{
+				return null;
 			}
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
 		}
-		
-		return null;
+		return marca;
+
 	}
 	
 	

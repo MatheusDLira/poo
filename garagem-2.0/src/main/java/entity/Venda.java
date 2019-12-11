@@ -1,6 +1,6 @@
 package entity;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Venda {
 	private int id;
@@ -8,10 +8,17 @@ public class Venda {
 	private float valor_venda;
 	private Cliente cliente;
 	private Funcionario funcionario;
-	private Date dt_venda;
+	private java.sql.Date dt_venda;
 	private int cod_venda;
 	private float comissao_venda;
-	
+
+	public Date getDt_venda() {
+		return dt_venda;
+	}
+	public void setDt_venda(Date dt_venda) {
+		this.dt_venda = dt_venda;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -42,12 +49,6 @@ public class Venda {
 	}
 	public void setFuncionario(Funcionario funcionario) {
 		this.funcionario = funcionario;
-	}
-	public Date getDt_venda() {
-		return dt_venda;
-	}
-	public void setDt_venda(Date dt_venda) {
-		this.dt_venda = dt_venda;
 	}
 	public int getCod_venda() {
 		return cod_venda;

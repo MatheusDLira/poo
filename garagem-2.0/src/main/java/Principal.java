@@ -1,46 +1,45 @@
 import java.util.Scanner;
 
 import view.AutomovelView;
-import view.ClienteView;
-import view.FuncionarioView;
-import view.MarcaView;
-import view.ModeloView;
-import view.VendaView;
+import view.*;
+//import view.VendaView;
 
 
 public class Principal {
-	
-	Banco banco = new Banco();	
-	AutomovelView automovelView = new AutomovelView();
-	MarcaView marcaView = new MarcaView();
-	ModeloView modeloView = new ModeloView();
-	FuncionarioView funcionarioView = new FuncionarioView();
-	ClienteView clienteView = new ClienteView();
-	VendaView vendaView = new VendaView();
+
+    PessoaView pessoaView = new PessoaView();
+    AutomovelView automovelView = new AutomovelView();
+    MarcaView marcaView = new MarcaView();
+    ModeloView modeloView = new ModeloView();
+    FuncionarioView funcionarioView = new FuncionarioView();
+    ClienteView clienteView = new ClienteView();
+    VendaView vendaView = new VendaView();
 
     public static void main(String[] args){
-    	
-    	Principal principal = new Principal();
-    	principal.menuPrincipal();
-    	
+
+        Principal principal = new Principal();
+        principal.menuPrincipal();
 
 
-      
+
+
     }
-    
-    
+
+
     public void menuPrincipal(){
-    	
-    	//ArrayList<Marca> bdMarca = new ArrayList<Marca>();
+
+        //ArrayList<Marca> bdMarca = new ArrayList<Marca>();
 
 
         System.out.println("#Menu Principal");
-        System.out.println("01- Funcionario");
-        System.out.println("02- Cliente");
-        System.out.println("03- Automovel");
-        System.out.println("04- Vendas");
-        System.out.println("05- Marcas");
-        System.out.println("06- Modelo");
+        System.out.println("01- Pessoa");
+        System.out.println("02- Funcionario");
+        System.out.println("03- Cliente");
+        System.out.println("04- Marcas");
+        System.out.println("05- Modelo");
+        System.out.println("06- Automovel");
+        System.out.println("07- Vendas");
+
         System.out.println("00- Sair");
 
         Scanner sc = new Scanner(System.in);
@@ -48,32 +47,34 @@ public class Principal {
 
         switch (op){
             case 1:
-            	banco.bdFuncionario = funcionarioView.menuFuncionario(banco.bdFuncionario);
-            	menuPrincipal();
+                pessoaView.menuPessoa();
+                menuPrincipal();
                 break;
             case 2:
-            	banco.bdCliente = clienteView.menuCliente(banco.bdCliente);
-            	menuPrincipal();
+                funcionarioView.menuFuncionario();
+                menuPrincipal();
                 break;
             case 3:
-            	banco.bdAutomovel = automovelView.menuAutomovel( banco.bdAutomovel, banco.bdModelo);  
-            	menuPrincipal();
+                clienteView.menuCliente();
+                menuPrincipal();
                 break;
             case 4:
-            	banco.bdVenda = vendaView.menuVenda( banco.bdVenda, banco.bdAutomovel, banco.bdCliente, banco.bdFuncionario);  
-            	menuPrincipal();
+                marcaView.menuMarca();
+                menuPrincipal();
                 break;
             case 5:
-            	
-            	banco.bdMarca = marcaView.menuMarca(banco.bdMarca);
-            	menuPrincipal();
+                modeloView.menuModelo();
+                menuPrincipal();
                 break;
             case 6:
-            	
-            	banco.bdModelo = modeloView.menuModelo(banco.bdModelo, banco.bdMarca);  
-            	menuPrincipal();
-            	
+                automovelView.menuAutomovel();
+
+                menuPrincipal();
+
                 break;
+            case 7:
+                vendaView.menuVenda();
+                menuPrincipal();
             case 0: default:
                 System.exit(0);
                 break;
@@ -84,5 +85,5 @@ public class Principal {
 
 
 
-    
+
 }
